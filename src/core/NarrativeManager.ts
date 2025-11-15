@@ -17,13 +17,34 @@ export class NarrativeManager {
    */
   async loadNarrativeTree(treeId: string): Promise<void> {
     try {
+      if (!treeId || typeof treeId !== "string") {
+        throw new Error("treeId deve ser uma string válida");
+      }
+
       const tree = await loadNarrativeTree(treeId);
+
+      // Validar estrutura básica
+      if (!tree || !tree.nodes || !Array.isArray(tree.nodes)) {
+        throw new Error("Árvore de narrativa inválida: estrutura de dados incorreta");
+      }
+
+      if (tree.nodes.length === 0) {
+        throw new Error("Árvore de narrativa vazia: nenhum nó encontrado");
+      }
 
       // Construir Map de nós
       this.narrativeTree.clear();
       tree.nodes.forEach((node) => {
+        if (!node.nodeId) {
+          console.warn("Nó sem nodeId encontrado, ignorando:", node);
+          return;
+        }
         this.narrativeTree.set(node.nodeId, node);
       });
+
+      if (this.narrativeTree.size === 0) {
+        throw new Error("Nenhum nó válido encontrado na árvore de narrativa");
+      }
     } catch (error) {
       console.error(`Erro ao carregar árvore de narrativa ${treeId}:`, error);
       throw error;
@@ -35,15 +56,45 @@ export class NarrativeManager {
    * Versão simples - sem condições ainda
    */
   getNextNode(nodeId: string): DialogueNode | null {
+    if (!nodeId || typeof nodeId !== "string") {
+      console.warn("nodeId inválido:", nodeId);
+      return null;
+    }
+
     const node = this.narrativeTree.get(nodeId);
     if (!node) {
       console.warn(`Nó ${nodeId} não encontrado na árvore de narrativa`);
       return null;
     }
 
+    // Validar estrutura do nó
+    if (!node.characterName) {
+      console.warn(`Nó ${nodeId} sem characterName, usando padrão`);
+      node.characterName = "Sistema";
+    }
+
     // Se o nó é automático, retornar diretamente
     if (node.isAutomatic) {
       return node;
+    }
+
+    // Validar opções
+    if (node.options && node.options.length > 0) {
+      // Validar cada opção
+      const validOptions = node.options.filter((opt) => {
+        if (!opt.optionId || !opt.text || !opt.nextNodeId) {
+          console.warn(`Opção inválida no nó ${nodeId}:`, opt);
+          return false;
+        }
+        return true;
+      });
+
+      if (validOptions.length === 0 && node.options.length > 0) {
+        console.error(`Nó ${nodeId} não tem opções válidas`);
+        return null;
+      }
+
+      node.options = validOptions;
     }
 
     // Randomizar posições das opções se necessário

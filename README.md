@@ -1,73 +1,181 @@
-# React + TypeScript + Vite
+# Sinergia - Jogo de Narrativa Interativa
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Jogo narrativo em primeira pessoa onde o jogador assume o papel de um funcionário do departamento de "Otimização de Recursos Humanos" em uma megacorporação. O jogo utiliza a mecânica de **Amabilidade** de forma invertida: escolhas que parecem "corretas" (eficientes para a empresa) levam ao final ruim, enquanto escolhas genuinamente amáveis levam ao final bom.
 
-Currently, two official plugins are available:
+## 🎮 Conceito
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Final Ruim (aparentemente "bom")**: Demitir todos os funcionários usando linguagem amável manipuladora
+- **Final Bom (verdadeiro)**: Usar Amabilidade genuína (Empatia, Respeito, Confiança) e ser demitido por "incompetência"
 
-## React Compiler
+## 🚀 Tecnologias
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19** + **TypeScript** - Framework e tipagem
+- **Vite** - Build tool e dev server
+- **React Three Fiber** - Renderização 3D
+- **Zustand** - Gerenciamento de estado
+- **Tailwind CSS** - Estilização
+- **Three.js** - Engine 3D
 
-## Expanding the ESLint configuration
+## 📋 Pré-requisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 18+ 
+- npm ou yarn
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ Instalação
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# Clone o repositório
+git clone <url-do-repositorio>
+cd sinergia-game
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Instale as dependências
+npm install
+
+# Inicie o servidor de desenvolvimento
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+O jogo estará disponível em `http://localhost:5173`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📦 Scripts Disponíveis
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
+
+# Preview do build de produção
+npm run preview
+
+# Linting
+npm run lint
 ```
+
+## 📁 Estrutura do Projeto
+
+```
+sinergia-game/
+├── public/
+│   ├── data/
+│   │   └── narrative-trees/    # Árvores de narrativa (JSON)
+│   └── models/                  # Modelos 3D (futuro)
+├── src/
+│   ├── components/
+│   │   ├── 3d/                  # Componentes 3D (React Three Fiber)
+│   │   │   ├── OfficeScene.tsx
+│   │   │   ├── Character.tsx
+│   │   │   ├── Desk.tsx
+│   │   │   └── WindowView.tsx
+│   │   └── ui/                  # Componentes de UI
+│   │       ├── DialogueUI.tsx
+│   │       ├── OptionButton.tsx
+│   │       ├── ConscienceNarrator.tsx
+│   │       └── ErrorBoundary.tsx
+│   ├── core/                    # Lógica central
+│   │   ├── NarrativeManager.ts
+│   │   └── AmabilityScore.ts
+│   ├── scenes/                  # Cenas do jogo
+│   │   └── OfficeScene.tsx
+│   ├── store/                   # Estado global (Zustand)
+│   │   └── gameStore.ts
+│   ├── types/                   # Tipos TypeScript
+│   │   ├── dialogue.ts
+│   │   ├── character.ts
+│   │   ├── game.ts
+│   │   └── narrative.ts
+│   ├── utils/                   # Utilitários
+│   │   └── jsonLoader.ts
+│   ├── App.tsx
+│   └── main.tsx
+└── package.json
+```
+
+## 🎯 Sistema de Narrativa
+
+O jogo utiliza um sistema de árvore de decisões baseado em nós (nodes). Cada nó contém:
+- Texto do diálogo
+- Opções de resposta (máximo 2)
+- Impacto na pontuação de Amabilidade
+- Comentários da "Consciência"
+
+### Estrutura de um Nó
+
+```json
+{
+  "nodeId": "carlos_intro",
+  "characterName": "Carlos",
+  "dialogueText": "Eu estou preocupado...",
+  "options": [
+    {
+      "optionId": "opt_manipulative",
+      "text": "Opção manipuladora",
+      "nextNodeId": "carlos_signed",
+      "amabilityImpact": {
+        "totalAmability": -10,
+        "efficiency": 15
+      }
+    }
+  ]
+}
+```
+
+## 🎨 Sistema de Pontuação
+
+O jogo rastreia múltiplas métricas:
+- **Total Amability**: Média ponderada de Empatia, Respeito e Confiança
+- **Empathy**: Nível de empatia
+- **Respect**: Nível de respeito
+- **Trust**: Nível de confiança
+- **Efficiency**: Eficiência corporativa (inversamente proporcional à Amabilidade)
+
+### Determinação de Final
+
+- **Final Bom**: Amabilidade > 70, Eficiência < 30
+- **Final Ruim**: Amabilidade < 30, Eficiência > 70
+- **Final Neutro**: Valores intermediários
+
+## 🐛 Tratamento de Erros
+
+O projeto inclui:
+- Error Boundary para capturar erros React
+- Validação de dados JSON
+- Mensagens de erro amigáveis
+- Fallbacks para dados faltantes
+
+## 🚧 Status do Projeto
+
+**Fase 1: Prototipagem e Core Systems** - ✅ Completo
+
+- ✅ Setup do projeto
+- ✅ Sistema de estado e narrativa
+- ✅ UI de diálogo
+- ✅ Cena 3D básica
+- ✅ Personagem placeholder
+
+## 📝 Desenvolvimento
+
+### Adicionar Nova Árvore de Narrativa
+
+1. Crie um arquivo JSON em `public/data/narrative-trees/`
+2. Siga a estrutura definida em `src/types/narrative.ts`
+3. Use `loadNarrativeTree(treeId)` no gameStore
+
+### Adicionar Novo Personagem
+
+1. Crie a árvore de narrativa do personagem
+2. Adicione dados do personagem em `src/types/character.ts`
+3. O sistema carregará automaticamente baseado no `characterId`
+
+## 📄 Licença
+
+Este projeto é parte de um projeto educacional sobre competência emocional.
+
+## 👥 Contribuindo
+
+Este é um projeto em desenvolvimento. Para contribuir, consulte a documentação de desenvolvimento em `DOCS_PROJETO/`.
+
+---
+
+**Desenvolvido como parte do projeto de Macrocompetência Emocional**

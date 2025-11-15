@@ -2,6 +2,7 @@
  * Componente de botão para opções de diálogo
  */
 
+import { memo } from "react";
 import type { DialogueOption } from "../../types";
 
 interface OptionButtonProps {
@@ -10,7 +11,7 @@ interface OptionButtonProps {
   onClick: () => void;
 }
 
-export function OptionButton({ option, position, onClick }: OptionButtonProps) {
+export const OptionButton = memo(function OptionButton({ option, position, onClick }: OptionButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -28,5 +29,5 @@ export function OptionButton({ option, position, onClick }: OptionButtonProps) {
       <p className="text-lg leading-relaxed">{option.text}</p>
     </button>
   );
-}
+});
 

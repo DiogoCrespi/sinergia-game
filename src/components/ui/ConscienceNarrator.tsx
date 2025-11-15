@@ -2,11 +2,13 @@
  * Componente para exibir comentários da "Consciência"
  */
 
+import { memo } from "react";
+
 interface ConscienceNarratorProps {
   comment?: string;
 }
 
-export function ConscienceNarrator({ comment }: ConscienceNarratorProps) {
+export const ConscienceNarrator = memo(function ConscienceNarrator({ comment }: ConscienceNarratorProps) {
   if (!comment) return null;
 
   return (
@@ -19,5 +21,5 @@ export function ConscienceNarrator({ comment }: ConscienceNarratorProps) {
       </div>
     </div>
   );
-}
+});
 

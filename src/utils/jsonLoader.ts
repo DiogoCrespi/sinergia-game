@@ -10,6 +10,10 @@ const cache = new Map<string, any>();
  * Carrega um arquivo JSON genérico
  */
 export async function loadJSON<T>(path: string): Promise<T> {
+  if (!path || typeof path !== "string") {
+    throw new Error("Caminho do arquivo inválido");
+  }
+
   // Verificar cache primeiro
   if (cache.has(path)) {
     return cache.get(path) as T;
@@ -19,19 +23,33 @@ export async function loadJSON<T>(path: string): Promise<T> {
     const response = await fetch(path);
 
     if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(`Arquivo não encontrado: ${path}`);
+      }
       throw new Error(
         `Erro ao carregar ${path}: ${response.status} ${response.statusText}`
       );
     }
 
     const data = await response.json();
+    
+    if (!data) {
+      throw new Error(`Arquivo JSON vazio: ${path}`);
+    }
+
     cache.set(path, data);
     return data as T;
   } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Erro ao carregar JSON de ${path}: ${error.message}`);
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      throw new Error(`Erro de rede ao carregar ${path}. Verifique sua conexão.`);
     }
-    throw error;
+    if (error instanceof SyntaxError) {
+      throw new Error(`Erro ao parsear JSON de ${path}: arquivo inválido`);
+    }
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(`Erro desconhecido ao carregar ${path}`);
   }
 }
 
