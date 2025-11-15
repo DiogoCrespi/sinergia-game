@@ -17,13 +17,17 @@ export class NarrativeManager {
    */
   async loadNarrativeTree(treeId: string): Promise<void> {
     try {
+      console.log(`NarrativeManager: Carregando árvore ${treeId}`);
       const tree = await loadNarrativeTree(treeId);
+      console.log(`Árvore carregada:`, tree);
 
       // Construir Map de nós
       this.narrativeTree.clear();
       tree.nodes.forEach((node) => {
         this.narrativeTree.set(node.nodeId, node);
+        console.log(`Nó adicionado: ${node.nodeId}`);
       });
+      console.log(`Total de nós carregados: ${this.narrativeTree.size}`);
     } catch (error) {
       console.error(`Erro ao carregar árvore de narrativa ${treeId}:`, error);
       throw error;
