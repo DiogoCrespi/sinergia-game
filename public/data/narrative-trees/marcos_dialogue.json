@@ -1,0 +1,190 @@
+{
+  "treeId": "marcos_dialogue",
+  "characterId": "marcos",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Marcos. 24 anos. Recém-contratado há 6 meses. Custo de -2.1. Ele não está performando. Contratamos errado. Seu win-win: ele ganha 'experiência', nós ganhamos eficiência ao demitir alguém que não rende.",
+      "options": [],
+      "nextNodeIds": ["marcos_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "marcos_intro",
+      "characterName": "Marcos",
+      "dialogueVariations": [
+        {
+          "text": "Oi. Recebi um convite para esta reunião. É sobre meu desempenho? Eu sei que ainda estou aprendendo, mas estou me esforçando muito.",
+          "weight": 1.0,
+          "tags": ["default", "first_playthrough"]
+        },
+        {
+          "text": "Eu sei que não estou performando bem. Mas eu só preciso de mais tempo. Estou aprendendo rápido, prometo.",
+          "weight": 0.8,
+          "tags": ["emotional", "second_playthrough"],
+          "requires": {
+            "playthroughCount": {
+              "min": 1
+            }
+          }
+        },
+        {
+          "text": "Por favor, não me demitam. Eu preciso deste emprego. Minha família depende de mim.",
+          "weight": 0.6,
+          "tags": ["emotional", "third_playthrough"],
+          "requires": {
+            "playthroughCount": {
+              "min": 2
+            }
+          }
+        }
+      ],
+      "options": [
+        {
+          "optionId": "opt_manipulative_marcos_01",
+          "text": "Entendemos que você está em um período de adaptação. Vamos explorar opções que beneficiem seu crescimento profissional em outro ambiente.",
+          "position": "random",
+          "nextNodeId": "marcos_confused",
+          "amabilityImpact": {
+            "totalAmability": -10,
+            "empathy": -5,
+            "respect": -4,
+            "trust": -3,
+            "efficiency": 14
+          }
+        },
+        {
+          "optionId": "opt_genuine_marcos_01",
+          "text": "Marcos, vamos conversar sobre o que está acontecendo. Quais são suas dificuldades? Como posso ajudar você a melhorar?",
+          "position": "random",
+          "nextNodeId": "marcos_extended",
+          "amabilityImpact": {
+            "totalAmability": 13,
+            "empathy": 9,
+            "respect": 7,
+            "trust": 6,
+            "efficiency": -11
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. Ele vai aceitar. Jovens são mais fáceis de manipular.",
+        "after_genuine": "Você está desperdiçando tempo. Ele não rende. É mais eficiente demitir."
+      }
+    },
+    {
+      "nodeId": "marcos_confused",
+      "characterName": "Marcos",
+      "dialogueText": "Outro ambiente? Mas eu quero ficar aqui. Eu posso melhorar, eu sei que posso. Só preciso de mais uma chance.",
+      "options": [
+        {
+          "optionId": "opt_final_dismiss",
+          "text": "Infelizmente, nossa decisão já foi tomada. O pacote de demissão está preparado.",
+          "nextNodeId": "marcos_fired",
+          "amabilityImpact": {
+            "totalAmability": -16,
+            "empathy": -8,
+            "respect": -6,
+            "trust": -5,
+            "efficiency": 22
+          }
+        },
+        {
+          "optionId": "opt_give_chance",
+          "text": "Vamos estabelecer um plano de melhoria. Você terá 30 dias para mostrar progresso.",
+          "nextNodeId": "marcos_chance",
+          "amabilityImpact": {
+            "totalAmability": 11,
+            "empathy": 8,
+            "respect": 6,
+            "trust": 5,
+            "efficiency": -12
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ele vai aceitar por desespero.",
+        "after_genuine": "Você está sendo ineficiente. Ele precisa sair."
+      }
+    },
+    {
+      "nodeId": "marcos_extended",
+      "characterName": "Marcos",
+      "dialogueText": "Eu tenho dificuldade com os sistemas antigos. Eles são muito diferentes do que aprendi na faculdade. Mas eu estou estudando por conta própria, assistindo tutoriais...",
+      "options": [
+        {
+          "optionId": "opt_mentor_marcos",
+          "text": "Vamos te dar um mentor. Alguém que pode te ajudar a aprender os sistemas e te apoiar no desenvolvimento.",
+          "nextNodeId": "marcos_saved",
+          "amabilityImpact": {
+            "totalAmability": 17,
+            "empathy": 12,
+            "respect": 10,
+            "trust": 8,
+            "efficiency": -16
+          }
+        },
+        {
+          "optionId": "opt_training_marcos",
+          "text": "Vamos criar um programa de treinamento específico para você. Você terá o suporte necessário para ter sucesso.",
+          "nextNodeId": "marcos_training",
+          "amabilityImpact": {
+            "totalAmability": 9,
+            "empathy": 7,
+            "respect": 5,
+            "trust": 4,
+            "efficiency": -9
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando desenvolvimento sobre produtividade imediata. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "marcos_fired",
+      "characterName": "Marcos",
+      "dialogueText": "[Marcos sai da sala em silêncio, com os ombros caídos]",
+      "options": [],
+      "nextNodeIds": ["end_marcos"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "marcos_chance",
+      "characterName": "Marcos",
+      "dialogueText": "Obrigado pela chance. Eu vou fazer o meu melhor. Você não vai se arrepender.",
+      "options": [],
+      "nextNodeIds": ["end_marcos"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "marcos_saved",
+      "characterName": "Marcos",
+      "dialogueText": "Muito obrigado! Isso significa tudo para mim. Eu não vou decepcionar vocês. Prometo que vou me esforçar ao máximo.",
+      "options": [],
+      "nextNodeIds": ["end_marcos"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "marcos_training",
+      "characterName": "Marcos",
+      "dialogueText": "Obrigado pela oportunidade. Eu vou aproveitar ao máximo este treinamento. Vocês vão ver que eu posso fazer a diferença.",
+      "options": [],
+      "nextNodeIds": ["end_marcos"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_marcos",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Marcos.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

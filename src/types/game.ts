@@ -24,5 +24,9 @@ export interface GameState {
   amabilityScore: AmabilityScore;
   currentCharacter: string | null;
   currentNode: DialogueNode | null;
+  usedTags: string[]; // Tags de variações já usadas
+  charactersMet: string[]; // IDs dos personagens encontrados
+  currentCharacterIndex: number; // Índice do personagem atual na sequência
+  characterSequence: string[]; // Sequência de personagens a serem encontrados
 }
 

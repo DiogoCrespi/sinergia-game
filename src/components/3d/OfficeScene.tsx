@@ -7,11 +7,15 @@ import { PerspectiveCamera } from "@react-three/drei";
 import { Desk } from "./Desk";
 import { WindowView } from "./WindowView";
 import { Character } from "./Character";
+import { Effects } from "./Effects";
 
 export function OfficeScene3D() {
   return (
     <Canvas
-      gl={{ antialias: true }}
+      gl={{ 
+        antialias: true,
+        toneMappingExposure: 1.0,
+      }}
       style={{ width: "100%", height: "100vh", position: "absolute", top: 0, left: 0 }}
     >
       {/* Câmera - primeira pessoa, posição sentada */}
@@ -21,11 +25,24 @@ export function OfficeScene3D() {
         fov={75}
       />
 
-      {/* Iluminação */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 10, 5]} intensity={0.8} />
-      <directionalLight position={[-5, 5, -5]} intensity={0.3} />
-      <pointLight position={[0, 3, 0]} intensity={0.5} />
+      {/* Iluminação melhorada */}
+      {/* Luz ambiente suave */}
+      <ambientLight intensity={0.5} />
+      
+      {/* Luz principal (simulando janelas) */}
+      <directionalLight 
+        position={[5, 10, 5]} 
+        intensity={1.0}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
+      
+      {/* Luz de preenchimento */}
+      <directionalLight position={[-5, 5, -5]} intensity={0.4} />
+      
+      {/* Luz pontual para iluminação artificial do escritório */}
+      <pointLight position={[0, 3, 0]} intensity={0.6} />
 
       {/* Ambiente do escritório */}
       <Desk position={[0, 0, 0]} />
@@ -55,6 +72,9 @@ export function OfficeScene3D() {
 
       {/* Personagem */}
       <Character />
+
+      {/* Efeitos visuais (post-processing) */}
+      <Effects />
     </Canvas>
   );
 }

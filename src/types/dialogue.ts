@@ -31,6 +31,7 @@ export interface DialogueOption {
   position?: "left" | "right" | "random";
   nextNodeId: string;
   amabilityImpact: AmabilityImpact;
+  conditions?: Condition[]; // Condições para a opção aparecer
 }
 
 export interface AmabilityImpact {
@@ -53,6 +54,7 @@ export interface ConditionRequirement {
   empathyScore?: { min?: number; max?: number };
   respectScore?: { min?: number; max?: number };
   trustScore?: { min?: number; max?: number };
+  efficiencyScore?: { min?: number; max?: number };
   charactersMet?: string[];
   choicesMade?: string[];
 }

@@ -2,13 +2,14 @@
  * Componente principal de UI para diálogos
  */
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useGameStore } from "../../store/gameStore";
 import { OptionButton } from "./OptionButton";
 import { ConscienceNarrator } from "./ConscienceNarrator";
+import type { DialogueOption } from "../../types/dialogue";
 
 export function DialogueUI() {
-  const { currentNode, onChoiceMade, nextNode, setCurrentState } = useGameStore();
+  const { currentNode, onChoiceMade, nextNode, setCurrentState, completeCurrentCharacter } = useGameStore();
 
   // Não iniciar automaticamente - o menu já faz isso
   // O diálogo só aparece quando há um nó atual
@@ -23,16 +24,43 @@ export function DialogueUI() {
       return () => clearTimeout(timer);
     }
     
-    // Se chegou ao nó final (sem opções e sem nextNodeIds), mostrar final
-    if (currentNode && !currentNode.options?.length && !currentNode.nextNodeIds?.length && currentNode.nodeId.includes("end")) {
+    // Se chegou ao nó final de um personagem, avançar para o próximo
+    if (currentNode && currentNode.nodeId.includes("end_") && !currentNode.options?.length) {
+      const timer = setTimeout(() => {
+        completeCurrentCharacter();
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+    
+    // Se chegou ao final geral (sem personagens restantes), mostrar final
+    if (currentNode && currentNode.nodeId === "end_all" && !currentNode.options?.length) {
       const timer = setTimeout(() => {
         setCurrentState("ending");
       }, 2000);
       
       return () => clearTimeout(timer);
     }
-  }, [currentNode, nextNode, setCurrentState]);
+  }, [currentNode, nextNode, setCurrentState, completeCurrentCharacter]);
 
+  // IMPORTANTE: Todos os hooks devem ser chamados ANTES de qualquer return condicional
+  // para seguir as regras dos hooks do React
+  
+  const handleChoice = useCallback((option: DialogueOption) => {
+    // Processar escolha
+    onChoiceMade(option.optionId, option.amabilityImpact);
+    
+    // Avançar para próximo nó
+    nextNode(option.nextNodeId);
+  }, [onChoiceMade, nextNode]);
+
+  // Determinar qual comentário da consciência exibir
+  const conscienceComment = useMemo(() => {
+    if (!currentNode) return "";
+    return currentNode.conscienceComment?.before || "";
+  }, [currentNode?.conscienceComment]);
+
+  // Agora podemos fazer o return condicional DEPOIS de todos os hooks
   if (!currentNode) {
     return (
       <div className="fixed bottom-0 left-0 right-0 p-8 bg-black/80 text-white z-50">
@@ -42,17 +70,6 @@ export function DialogueUI() {
       </div>
     );
   }
-
-  const handleChoice = (option: typeof currentNode.options[0]) => {
-    // Processar escolha
-    onChoiceMade(option.optionId, option.amabilityImpact);
-    
-    // Avançar para próximo nó
-    nextNode(option.nextNodeId);
-  };
-
-  // Determinar qual comentário da consciência exibir
-  const conscienceComment = currentNode.conscienceComment?.before || "";
 
   return (
     <div className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/95 to-black/80 text-white z-50">

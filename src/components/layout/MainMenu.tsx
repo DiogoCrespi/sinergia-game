@@ -2,10 +2,13 @@
  * Menu principal do jogo
  */
 
+import { useState } from "react";
 import { useGameStore } from "../../store/gameStore";
+import { LoadGameModal } from "../ui/LoadGameModal";
 
 export function MainMenu() {
   const { startGame, setCurrentState } = useGameStore();
+  const [showLoadModal, setShowLoadModal] = useState(false);
 
   const handleStartGame = async () => {
     try {
@@ -43,6 +46,13 @@ export function MainMenu() {
           </button>
 
           <button
+            onClick={() => setShowLoadModal(true)}
+            className="w-full max-w-md px-8 py-4 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+          >
+            Carregar Jogo
+          </button>
+
+          <button
             onClick={() => {
               // Placeholder para futuras funcionalidades
               alert("Funcionalidade em desenvolvimento");
@@ -52,6 +62,12 @@ export function MainMenu() {
             Créditos
           </button>
         </div>
+
+        {/* Modal de Carregar */}
+        <LoadGameModal
+          isOpen={showLoadModal}
+          onClose={() => setShowLoadModal(false)}
+        />
 
         {/* Instruções */}
         <div className="mt-12 text-left max-w-md mx-auto">

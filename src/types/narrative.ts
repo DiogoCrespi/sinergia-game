@@ -22,6 +22,7 @@ export type ConditionType =
   | "empathyScore"
   | "respectScore"
   | "trustScore"
+  | "efficiencyScore"
   | "charactersMet"
   | "choicesMade"
   | "playthroughCount";
@@ -31,6 +32,7 @@ export const ConditionType = {
   EmpathyScore: "empathyScore" as const,
   RespectScore: "respectScore" as const,
   TrustScore: "trustScore" as const,
+  EfficiencyScore: "efficiencyScore" as const,
   CharactersMet: "charactersMet" as const,
   ChoicesMade: "choicesMade" as const,
   PlaythroughCount: "playthroughCount" as const,

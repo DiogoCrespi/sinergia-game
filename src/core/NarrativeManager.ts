@@ -4,10 +4,19 @@
 
 import type {
   DialogueNode,
+  DialogueVariation,
   GameState,
   Condition,
 } from "../types";
 import { loadNarrativeTree } from "../utils/jsonLoader";
+import {
+  checkConditions as checkConditionsUtil,
+  checkConditionRequirement,
+} from "../utils/conditions";
+import {
+  generateContextualTags,
+  adjustWeightByContext,
+} from "../utils/contextualTags";
 
 export class NarrativeManager {
   private narrativeTree: Map<string, DialogueNode> = new Map();
@@ -53,9 +62,9 @@ export class NarrativeManager {
 
   /**
    * Obtém o próximo nó da narrativa
-   * Versão simples - sem condições ainda
+   * Agora com suporte a variações e condições
    */
-  getNextNode(nodeId: string): DialogueNode | null {
+  getNextNode(nodeId: string, gameState?: GameState): DialogueNode | null {
     if (!nodeId || typeof nodeId !== "string") {
       console.warn("nodeId inválido:", nodeId);
       return null;
@@ -73,15 +82,41 @@ export class NarrativeManager {
       node.characterName = "Sistema";
     }
 
+    // Verificar condições do nó (se gameState fornecido)
+    if (gameState && node.conditions) {
+      if (!this.checkConditions(node.conditions, gameState)) {
+        console.log(`Condições não atendidas para nó ${nodeId}`);
+        return null;
+      }
+    }
+
+    // Aplicar variações de diálogo (se gameState fornecido)
+    let processedNode = node;
+    if (gameState && node.dialogueVariations) {
+      processedNode = this.applyVariations(node, gameState);
+    }
+
     // Se o nó é automático, retornar diretamente
-    if (node.isAutomatic) {
-      return node;
+    if (processedNode.isAutomatic) {
+      return processedNode;
     }
 
     // Validar opções
-    if (node.options && node.options.length > 0) {
-      // Validar cada opção
-      const validOptions = node.options.filter((opt) => {
+    if (processedNode.options && processedNode.options.length > 0) {
+      // Filtrar opções baseado em condições (se gameState fornecido)
+      let validOptions = processedNode.options;
+      if (gameState) {
+        validOptions = processedNode.options.filter((opt) => {
+          // Verificar condições da opção (se existir)
+          if (opt.conditions && opt.conditions.length > 0) {
+            return checkConditionsUtil(opt.conditions, gameState);
+          }
+          return true;
+        });
+      }
+
+      // Validar estrutura de cada opção
+      const structuredOptions = validOptions.filter((opt) => {
         if (!opt.optionId || !opt.text || !opt.nextNodeId) {
           console.warn(`Opção inválida no nó ${nodeId}:`, opt);
           return false;
@@ -89,16 +124,25 @@ export class NarrativeManager {
         return true;
       });
 
-      if (validOptions.length === 0 && node.options.length > 0) {
-        console.error(`Nó ${nodeId} não tem opções válidas`);
-        return null;
+      // Garantir que sempre há pelo menos uma opção válida
+      if (structuredOptions.length === 0) {
+        if (processedNode.options.length > 0) {
+          console.warn(
+            `Nó ${nodeId}: Todas as opções foram filtradas por condições. Usando primeira opção como fallback.`
+          );
+          // Fallback: usar primeira opção mesmo que não passe nas condições
+          processedNode.options = [processedNode.options[0]];
+        } else {
+          console.error(`Nó ${nodeId} não tem opções válidas`);
+          return null;
+        }
+      } else {
+        processedNode.options = structuredOptions;
       }
-
-      node.options = validOptions;
     }
 
     // Randomizar posições das opções se necessário
-    return this.randomizeOptions(node);
+    return this.randomizeOptions(processedNode);
   }
 
   /**
@@ -126,17 +170,150 @@ export class NarrativeManager {
   }
 
   /**
-   * Verifica se as condições de um nó são satisfeitas
-   * Versão simplificada - será expandida depois
+   * Aplica variações de diálogo ao nó
+   * Seleciona uma variação baseada em peso, tags e condições
+   * Método público para uso externo
    */
-  checkConditions(conditions: Condition[] | undefined, _gameState: GameState): boolean {
-    if (!conditions || conditions.length === 0) {
-      return true;
+  public applyVariations(
+    node: DialogueNode,
+    gameState: GameState
+  ): DialogueNode {
+    // Se não há variações, retornar nó original
+    if (!node.dialogueVariations || node.dialogueVariations.length === 0) {
+      return node;
     }
 
-    // Implementação básica - será expandida no Sprint 3
-    // Por enquanto, sempre retorna true
-    return true;
+    // Filtrar variações válidas baseado em condições
+    const validVariations = node.dialogueVariations.filter((variation) => {
+      // Se não tem requires, sempre válida
+      if (!variation.requires) {
+        return true;
+      }
+
+      // Verificar requisitos da variação
+      return checkConditionRequirement(variation.requires, gameState);
+    });
+
+    // Se nenhuma variação é válida, usar fallback
+    if (validVariations.length === 0) {
+      console.warn(
+        `Nenhuma variação válida para nó ${node.nodeId}, usando primeira variação`
+      );
+      return {
+        ...node,
+        dialogueText: node.dialogueVariations[0].text,
+      };
+    }
+
+    // Gerar tags contextuais baseadas no estado do jogo
+    const contextualTags = generateContextualTags(gameState);
+
+    // Ajustar pesos baseado em tags usadas E tags contextuais
+    const adjustedVariations = validVariations.map((variation) => {
+      // Primeiro ajustar por tags usadas (reduzir peso de tags já usadas)
+      let adjustedWeight = this.adjustWeightByUsedTags(
+        variation.weight,
+        variation.tags || [],
+        gameState.usedTags
+      );
+
+      // Depois ajustar por tags contextuais (aumentar peso de tags relevantes)
+      adjustedWeight = adjustWeightByContext(
+        adjustedWeight,
+        variation.tags || [],
+        contextualTags
+      );
+
+      return {
+        ...variation,
+        weight: adjustedWeight,
+      };
+    });
+
+    // Selecionar variação baseada em peso
+    const selected = this.selectByWeight(adjustedVariations);
+
+    // Rastrear tags usadas (adicionar ao gameState)
+    if (selected.tags && selected.tags.length > 0) {
+      // Nota: Isso será feito no store, não aqui
+      // Por enquanto, apenas log
+      if (process.env.NODE_ENV === "development") {
+        console.log(`Tags usadas: ${selected.tags.join(", ")}`);
+      }
+    }
+
+    return {
+      ...node,
+      dialogueText: selected.text,
+    };
+  }
+
+  /**
+   * Ajusta peso de uma variação baseado em tags já usadas
+   * Reduz peso de variações com tags já usadas
+   */
+  private adjustWeightByUsedTags(
+    baseWeight: number,
+    variationTags: string[],
+    usedTags: string[]
+  ): number {
+    if (variationTags.length === 0) {
+      return baseWeight;
+    }
+
+    // Contar quantas tags desta variação já foram usadas
+    const usedTagCount = variationTags.filter((tag) =>
+      usedTags.includes(tag)
+    ).length;
+
+    // Reduzir peso proporcionalmente
+    // Se todas as tags foram usadas, reduzir peso em 50%
+    // Se metade, reduzir em 25%
+    const reductionFactor = usedTagCount / variationTags.length;
+    const adjustedWeight = baseWeight * (1 - reductionFactor * 0.5);
+
+    return Math.max(0.1, adjustedWeight); // Mínimo de 0.1
+  }
+
+  /**
+   * Seleciona uma variação baseada em peso (seleção aleatória ponderada)
+   */
+  private selectByWeight(variations: DialogueVariation[]): DialogueVariation {
+    if (variations.length === 0) {
+      throw new Error("Nenhuma variação fornecida para seleção");
+    }
+
+    // Calcular peso total
+    const totalWeight = variations.reduce(
+      (sum, variation) => sum + variation.weight,
+      0
+    );
+
+    if (totalWeight <= 0) {
+      console.warn("Peso total inválido, usando primeira variação");
+      return variations[0];
+    }
+
+    // Seleção aleatória ponderada
+    let random = Math.random() * totalWeight;
+
+    for (const variation of variations) {
+      random -= variation.weight;
+      if (random <= 0) {
+        return variation;
+      }
+    }
+
+    // Fallback (não deveria chegar aqui)
+    return variations[0];
+  }
+
+  /**
+   * Verifica se as condições de um nó são satisfeitas
+   * Usa o engine de condições
+   */
+  checkConditions(conditions: Condition[] | undefined, gameState: GameState): boolean {
+    return checkConditionsUtil(conditions, gameState);
   }
 
   /**

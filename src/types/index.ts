@@ -6,4 +6,5 @@ export * from "./dialogue";
 export * from "./character";
 export * from "./game";
 export * from "./narrative";
+export * from "./tags";
 
