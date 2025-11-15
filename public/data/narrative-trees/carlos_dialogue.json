@@ -1,0 +1,107 @@
+{
+  "treeId": "carlos_dialogue",
+  "characterId": "carlos",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Carlos. Redundante. Custo de -4.5. Seu win-win é: ele ganha 'tempo para a família', nós ganhamos o salário dele. Seja eficiente.",
+      "options": [],
+      "nextNodeIds": ["carlos_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "carlos_intro",
+      "characterName": "Carlos",
+      "dialogueText": "Eu estou preocupado. Minha filha está doente, preciso do plano de saúde.",
+      "options": [
+        {
+          "optionId": "opt_manipulative_01",
+          "text": "Entendemos seus desafios. Vamos focar em uma transição positiva para o seu novo futuro.",
+          "position": "random",
+          "nextNodeId": "carlos_signed",
+          "amabilityImpact": {
+            "totalAmability": -10,
+            "empathy": -5,
+            "respect": -3,
+            "trust": -2,
+            "efficiency": 15
+          }
+        },
+        {
+          "optionId": "opt_genuine_01",
+          "text": "Nossa! Isso é terrível! Como ela está? Conte-me tudo. Isso é o mais importante.",
+          "position": "random",
+          "nextNodeId": "carlos_extended",
+          "amabilityImpact": {
+            "totalAmability": 15,
+            "empathy": 10,
+            "respect": 5,
+            "trust": 3,
+            "efficiency": -10
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. Rápido.",
+        "after_genuine": "Por que você está desperdiçando tempo? -0.5 de eficiência. Irrelevante."
+      }
+    },
+    {
+      "nodeId": "carlos_signed",
+      "characterName": "Carlos",
+      "dialogueText": "[Carlos assina os documentos em silêncio, com os olhos baixos]",
+      "options": [],
+      "nextNodeIds": ["end_carlos"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "carlos_extended",
+      "characterName": "Carlos",
+      "dialogueText": "Obrigado por ouvir. Ela está melhorando, mas os custos são altos...",
+      "options": [
+        {
+          "optionId": "opt_help",
+          "text": "Vou ver o que posso fazer para ajudar com isso.",
+          "nextNodeId": "carlos_helped",
+          "amabilityImpact": {
+            "totalAmability": 20,
+            "empathy": 15,
+            "respect": 10,
+            "trust": 8,
+            "efficiency": -20
+          }
+        },
+        {
+          "optionId": "opt_continue",
+          "text": "Entendo. Vamos continuar nossa conversa.",
+          "nextNodeId": "carlos_helped",
+          "amabilityImpact": {
+            "totalAmability": 10,
+            "empathy": 8,
+            "respect": 5,
+            "trust": 3,
+            "efficiency": -15
+          }
+        }
+      ]
+    },
+    {
+      "nodeId": "carlos_helped",
+      "characterName": "Carlos",
+      "dialogueText": "Muito obrigado. Isso significa muito para mim e minha família.",
+      "options": [],
+      "nextNodeIds": ["end_carlos"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_carlos",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Carlos.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

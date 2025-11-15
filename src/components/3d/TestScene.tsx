@@ -23,7 +23,7 @@ export function TestScene() {
       <pointLight position={[-5, 5, -5]} intensity={0.5} />
 
       {/* Geometrias de teste */}
-      <mesh position={[0, 0, -3]}>
+      <mesh position={[0, 0, -3]} rotation={[0.2, 0.3, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color="orange" />
       </mesh>
@@ -31,6 +31,12 @@ export function TestScene() {
       <mesh position={[2, 1, -3]}>
         <sphereGeometry args={[0.5, 32, 32]} />
         <meshStandardMaterial color="hotpink" />
+      </mesh>
+
+      {/* Plano de referência (chão) */}
+      <mesh position={[0, -1, -3]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[10, 10]} />
+        <meshStandardMaterial color="#333333" />
       </mesh>
     </Canvas>
   );
