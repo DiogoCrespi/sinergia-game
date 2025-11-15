@@ -69,14 +69,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         currentNode: nextNode,
         currentCharacter: nextNode.characterName,
       });
-
-      // Se o nó é automático e tem nextNodeIds, avançar automaticamente
-      if (nextNode.isAutomatic && nextNode.nextNodeIds && nextNode.nextNodeIds.length > 0) {
-        // Usar setTimeout para dar tempo de exibir o nó atual
-        setTimeout(() => {
-          get().nextNode(nextNode.nextNodeIds![0]);
-        }, 2000); // 2 segundos de delay
-      }
     } else {
       console.warn(`Nó ${nodeId} não encontrado`);
     }
