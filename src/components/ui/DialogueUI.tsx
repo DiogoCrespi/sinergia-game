@@ -8,17 +8,10 @@ import { OptionButton } from "./OptionButton";
 import { ConscienceNarrator } from "./ConscienceNarrator";
 
 export function DialogueUI() {
-  const { currentNode, onChoiceMade, nextNode, startGame } = useGameStore();
+  const { currentNode, onChoiceMade, nextNode, setCurrentState } = useGameStore();
 
-  // Iniciar o jogo quando o componente montar pela primeira vez
-  useEffect(() => {
-    // Sempre tentar iniciar se não houver nó atual
-    if (!currentNode) {
-      startGame().catch((error) => {
-        console.error("Erro ao iniciar jogo:", error);
-      });
-    }
-  }, []);
+  // Não iniciar automaticamente - o menu já faz isso
+  // O diálogo só aparece quando há um nó atual
 
   // Lidar com nós automáticos
   useEffect(() => {
@@ -29,7 +22,16 @@ export function DialogueUI() {
 
       return () => clearTimeout(timer);
     }
-  }, [currentNode]);
+    
+    // Se chegou ao nó final (sem opções e sem nextNodeIds), mostrar final
+    if (currentNode && !currentNode.options?.length && !currentNode.nextNodeIds?.length && currentNode.nodeId.includes("end")) {
+      const timer = setTimeout(() => {
+        setCurrentState("ending");
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentNode, nextNode, setCurrentState]);
 
   if (!currentNode) {
     return (
