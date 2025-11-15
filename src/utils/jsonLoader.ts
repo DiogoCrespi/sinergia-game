@@ -42,15 +42,7 @@ export async function loadNarrativeTree(
   treeId: string
 ): Promise<NarrativeTree> {
   const path = `/data/narrative-trees/${treeId}.json`;
-  console.log(`Tentando carregar JSON de: ${path}`);
-  try {
-    const result = await loadJSON<NarrativeTree>(path);
-    console.log(`JSON carregado com sucesso:`, result);
-    return result;
-  } catch (error) {
-    console.error(`Erro ao carregar árvore ${treeId} de ${path}:`, error);
-    throw error;
-  }
+  return loadJSON<NarrativeTree>(path);
 }
 
 /**

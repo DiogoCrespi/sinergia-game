@@ -49,14 +49,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Action: Carrega uma árvore de narrativa
   loadNarrativeTree: async (treeId) => {
     try {
-      console.log(`Carregando árvore de narrativa: ${treeId}`);
       await narrativeManager.loadNarrativeTree(treeId);
       // Após carregar, obter o nó inicial
       const startNode = narrativeManager.getStartNode();
-      console.log("Nó inicial obtido:", startNode);
       if (startNode) {
         set({ currentNode: startNode });
-        console.log("Nó atual definido no store");
       } else {
         console.warn("Nó inicial não encontrado");
       }

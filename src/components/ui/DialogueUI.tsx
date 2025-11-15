@@ -14,14 +14,9 @@ export function DialogueUI() {
   useEffect(() => {
     // Sempre tentar iniciar se não houver nó atual
     if (!currentNode) {
-      console.log("Iniciando jogo...");
-      startGame()
-        .then(() => {
-          console.log("Jogo iniciado com sucesso");
-        })
-        .catch((error) => {
-          console.error("Erro ao iniciar jogo:", error);
-        });
+      startGame().catch((error) => {
+        console.error("Erro ao iniciar jogo:", error);
+      });
     }
   }, []);
 
