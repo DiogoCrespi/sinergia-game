@@ -65,3 +65,4 @@ Modelos do ambiente (mesa, cadeira, objetos) devem seguir as mesmas especificaç
 - [Blender glTF Export Guide](https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html)
 - [Three.js glTF Loader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader)
 
+

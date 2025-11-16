@@ -21,6 +21,21 @@ interface CharacterProps {
 // Cache de modelos carregados
 const modelCache = new Map<string, any>();
 
+// Lista de personagens válidos que têm modelos 3D disponíveis
+const VALID_CHARACTERS = ["carlos", "sara", "ana", "marcos"];
+
+// Personagens especiais que não devem renderizar modelo 3D
+const SPECIAL_CHARACTERS = ["sistema", "consciência", "consciencia"];
+
+/**
+ * Verifica se um personagem é válido para renderização 3D
+ */
+function isValidCharacter(characterId: string | null | undefined): boolean {
+  if (!characterId) return false;
+  const normalized = characterId.toLowerCase();
+  return VALID_CHARACTERS.includes(normalized) && !SPECIAL_CHARACTERS.includes(normalized);
+}
+
 /**
  * Componente de placeholder (fallback quando modelo não carrega)
  */
@@ -64,7 +79,8 @@ function CharacterPlaceholder({ position = [0, 0, -2] }: { position?: [number, n
 
 /**
  * Componente interno que carrega o modelo GLTF
- * useGLTF não lança erro, apenas retorna undefined se o arquivo não existir
+ * IMPORTANTE: Este componente só deve ser renderizado com personagens válidos
+ * (verificado no componente Character antes de renderizar)
  */
 function CharacterModel({ 
   characterId, 
@@ -78,6 +94,8 @@ function CharacterModel({
   // Tentar carregar modelo GLTF
   // useGLTF precisa ser chamado sempre no topo (regra dos hooks)
   // Normalizar characterId para minúsculas para garantir consistência
+  // NOTA: Este componente só deve ser renderizado com personagens válidos
+  // (verificado no componente Character antes de renderizar)
   const normalizedCharacterId = characterId?.toLowerCase() || "";
   const modelPath = `/models/characters/${normalizedCharacterId}.glb`;
   
@@ -89,6 +107,8 @@ function CharacterModel({
   // useGLTF retorna um objeto com scene e animations
   // IMPORTANTE: useGLTF é um hook e deve ser chamado sempre no topo
   // Segundo parâmetro false = usar cache (recomendado)
+  // Nota: Como já verificamos que o personagem é válido antes de renderizar,
+  // o useGLTF não deve tentar carregar arquivos inexistentes
   const gltf = useGLTF(modelPath, false);
 
   // Verificar se o modelo foi carregado corretamente
@@ -194,6 +214,11 @@ export function Character({
 
   // Se não houver personagem, não renderizar
   if (!characterId) {
+    return null;
+  }
+
+  // Se o personagem é especial (como "Sistema") ou não é válido, não renderizar modelo 3D
+  if (!isValidCharacter(characterId)) {
     return null;
   }
 

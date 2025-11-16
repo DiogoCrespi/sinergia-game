@@ -42,3 +42,4 @@ export function Desk({ position = [0, 0, 0] }: DeskProps) {
   );
 }
 
+

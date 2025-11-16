@@ -101,3 +101,4 @@ O Vercel atualizará automaticamente! ✨
 
 **Pronto! Seu jogo estará online em poucos minutos! 🎮**
 
+

@@ -53,3 +53,4 @@ Nenhum bug crítico conhecido no momento.
 - ⬜ Teste de edge cases (localStorage cheio, dados corrompidos)
 - ⬜ Teste de performance com múltiplas árvores carregadas
 
+

@@ -148,3 +148,4 @@ const results = {
 - ✅ ConditionRequirement completo
 - ✅ Tratamento de erros
 
+

@@ -76,3 +76,4 @@ Os valores estão balanceados. Ambos os finais são alcançáveis:
 - Thresholds podem ser ajustados se necessário (atualmente 30/70)
 - Cada personagem tem impacto similar (~30-40 pontos de diferença)
 
+
