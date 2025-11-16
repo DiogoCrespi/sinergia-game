@@ -18,7 +18,7 @@ interface CharacterProps {
   rotation?: [number, number, number];
 }
 
-// Cache de modelos carregados
+// Cache de modelos carregados.....
 const modelCache = new Map<string, any>();
 
 // Lista de personagens válidos que têm modelos 3D disponíveis
@@ -99,11 +99,6 @@ function CharacterModel({
   const normalizedCharacterId = characterId?.toLowerCase() || "";
   const modelPath = `/models/characters/${normalizedCharacterId}.glb`;
   
-  // Debug: log do caminho do modelo
-  useEffect(() => {
-    console.log(`Tentando carregar modelo: ${modelPath}`);
-  }, [modelPath]);
-  
   // useGLTF retorna um objeto com scene e animations
   // IMPORTANTE: useGLTF é um hook e deve ser chamado sempre no topo
   // Segundo parâmetro false = usar cache (recomendado)
@@ -111,24 +106,34 @@ function CharacterModel({
   // o useGLTF não deve tentar carregar arquivos inexistentes
   const gltf = useGLTF(modelPath, false);
 
-  // Verificar se o modelo foi carregado corretamente
-  if (!gltf || !gltf.scene) {
+  // Clonar cena para evitar problemas de reutilização (mesmo que seja undefined)
+  const scene = gltf?.scene?.clone();
+  const animations = gltf?.animations || [];
+  
+  // Sistema de animações (se disponível)
+  // IMPORTANTE: useAnimations deve ser chamado sempre, mesmo se não houver animações
+  const { actions, names } = useAnimations(animations, groupRef);
+  
+  // Debug: log do caminho do modelo (apenas em desenvolvimento)
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      console.log(`Tentando carregar modelo: ${modelPath}`);
+    }
+  }, [modelPath]);
+  
+  // Armazenar no cache se ainda não estiver (após hooks)
+  useEffect(() => {
+    if (gltf?.scene && !modelCache.has(modelPath)) {
+      modelCache.set(modelPath, { scene: gltf.scene, animations: gltf.animations });
+    }
+  }, [gltf, modelPath]);
+
+  // Verificar se o modelo foi carregado corretamente (DEPOIS de todos os hooks)
+  if (!gltf || !gltf.scene || !scene) {
     // Modelo não encontrado, usar placeholder
     console.warn(`Modelo não encontrado ou inválido: ${modelPath}. Verifique se o arquivo existe em public/models/characters/`);
     return <CharacterPlaceholder position={position} />;
   }
-
-  // Clonar cena para evitar problemas de reutilização
-  const scene = gltf.scene.clone();
-  const animations = gltf.animations || [];
-  
-  // Armazenar no cache se ainda não estiver
-  if (!modelCache.has(modelPath)) {
-    modelCache.set(modelPath, { scene: gltf.scene, animations: gltf.animations });
-  }
-
-  // Sistema de animações (se disponível)
-  const { actions, names } = useAnimations(animations, groupRef);
   
   // Mapear emoção para animação
   const getAnimationForEmotion = (emotion: Emotion): string | null => {
@@ -206,13 +211,21 @@ export function Character({
   const characterId = (propCharacterId || currentCharacter)?.toLowerCase();
   const [currentEmotion, setCurrentEmotion] = useState<Emotion>(propEmotion || "neutral");
   
+  // IMPORTANTE: Todos os hooks devem ser chamados ANTES de qualquer retorno condicional
+  // Atualizar emoção quando prop mudar
+  useEffect(() => {
+    if (propEmotion) {
+      setCurrentEmotion(propEmotion);
+    }
+  }, [propEmotion]);
+  
   // Obter configuração do personagem (ou usar props se fornecidas)
   const config = characterId ? getCharacterConfig(characterId) : null;
   const position = propPosition || config?.position || [0, 0, -2];
   const scale = propScale !== undefined ? propScale : (config?.scale || 1);
   const rotation = propRotation || config?.rotation || [0, 0, 0];
 
-  // Se não houver personagem, não renderizar
+  // Se não houver personagem, não renderizar (DEPOIS de todos os hooks)
   if (!characterId) {
     return null;
   }
@@ -222,15 +235,8 @@ export function Character({
     return null;
   }
 
-  // Atualizar emoção quando prop mudar
-  useEffect(() => {
-    if (propEmotion) {
-      setCurrentEmotion(propEmotion);
-    }
-  }, [propEmotion]);
-
   return (
-    <Suspense fallback={<CharacterPlaceholder position={position} />}>
+    <Suspense fallback={null}>
       <CharacterModel 
         characterId={characterId}
         emotion={currentEmotion}

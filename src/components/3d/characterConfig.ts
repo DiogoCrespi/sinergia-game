@@ -18,28 +18,28 @@ export const CHARACTER_CONFIGS: Record<string, CharacterConfig> = {
   carlos: {
     position: [0, 0, -2],      // [X, Y, Z] - X: esquerda/direita, Y: altura, Z: frente/trás
     scale: 4.5,                   // 1 = tamanho original, 0.5 = metade, 2 = dobro
-    rotation: [0, 5, 0],        // [X, Y, Z] em radianos - Y: rotação horizontal
+    rotation: [0, 4.8, 0],        // [X, Y, Z] em radianos - Y: rotação horizontal
   },
   
-  // Sara - valores padrão (ajustar quando adicionar modelo)
+  // Sara - ajuste estes valores para posicionar corretamente
   sara: {
-    position: [0, 0, -2],
-    scale: 1,
-    rotation: [0, 0, 0],
+    position: [0, 0, -2],      // [X, Y, Z] - X: esquerda/direita, Y: altura, Z: frente/trás
+    scale: 2.3,                   // 1 = tamanho original, 0.5 = metade, 2 = dobro
+    rotation: [0, 4.8, 0],        // [X, Y, Z] em radianos - Y: rotação horizontal
   },
   
-  // Ana - valores padrão (ajustar quando adicionar modelo)
+  // Ana - ajuste estes valores para posicionar corretamente
   ana: {
-    position: [0, 0, -2],
-    scale: 1,
-    rotation: [0, 0, 0],
+    position: [0, 0, -2],      // [X, Y, Z] - X: esquerda/direita, Y: altura, Z: frente/trás
+    scale: 4.5,                   // 1 = tamanho original, 0.5 = metade, 2 = dobro
+    rotation: [0, 4.8, 0],        // [X, Y, Z] em radianos - Y: rotação horizontal
   },
   
-  // Marcos - valores padrão (ajustar quando adicionar modelo)
+  // Marcos - ajuste estes valores para posicionar corretamente
   marcos: {
-    position: [0, 0, -2],
-    scale: 1,
-    rotation: [0, 0, 0],
+    position: [0, 0, -2],      // [X, Y, Z] - X: esquerda/direita, Y: altura, Z: frente/trás
+    scale: 2.3,                   // 1 = tamanho original, 0.5 = metade, 2 = dobro
+    rotation: [0, 4.8, 0],        // [X, Y, Z] em radianos - Y: rotação horizontal
   },
 };
 

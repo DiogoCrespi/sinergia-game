@@ -61,24 +61,19 @@ export function DialogueUI() {
   }, [currentNode?.conscienceComment]);
 
   // Agora podemos fazer o return condicional DEPOIS de todos os hooks
+  // Não mostrar nada durante o carregamento
   if (!currentNode) {
-    return (
-      <div className="fixed bottom-0 left-0 right-0 p-8 bg-black/80 text-white z-50">
-        <div className="text-center">
-          <p className="text-lg">Carregando diálogo...</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/95 to-black/80 text-white z-50">
       {/* Texto do diálogo */}
-      <div className="mb-6">
+      <div className="mb-6 text-center">
         <h3 className="text-2xl font-bold mb-3 text-blue-300">
           {currentNode.characterName}
         </h3>
-        <p className="text-lg leading-relaxed text-gray-100">
+        <p className="text-lg leading-relaxed text-gray-100 max-w-4xl mx-auto">
           {currentNode.dialogueText}
         </p>
       </div>

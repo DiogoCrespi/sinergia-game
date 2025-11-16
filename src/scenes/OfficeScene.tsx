@@ -8,7 +8,16 @@ import { SaveButton } from "../components/ui/SaveButton";
 
 export function OfficeScene() {
   return (
-    <div style={{ width: "100vw", height: "100vh", margin: 0, padding: 0, position: "relative" }}>
+    <div style={{ 
+      width: "100vw", 
+      height: "100vh", 
+      margin: 0, 
+      padding: 0, 
+      position: "fixed",
+      top: 0,
+      left: 0,
+      overflow: "hidden"
+    }}>
       {/* Cena 3D em background */}
       <OfficeScene3D />
       
