@@ -20,6 +20,9 @@ export function useParallax({ depth, intensity = 0.01 }: ParallaxOptions) {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isAndroid = /Android/i.test(navigator.userAgent);
+    
+    // Detectar se é desktop (mesmo com touch, se tiver mouse é desktop)
+    const isDesktop = !isMobile && (window.matchMedia('(pointer: fine)').matches || window.matchMedia('(hover: hover)').matches);
 
     // Detectar suporte para DeviceOrientationEvent (giroscópio)
     const supportsGyro = typeof DeviceOrientationEvent !== 'undefined';
@@ -27,15 +30,13 @@ export function useParallax({ depth, intensity = 0.01 }: ParallaxOptions) {
 
     // Handler para movimento do mouse (desktop)
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isMobile && !isTouchDevice) {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        
-        const deltaX = (e.clientX - centerX) * depth * intensity;
-        const deltaY = (e.clientY - centerY) * depth * intensity;
-        
-        setOffset({ x: deltaX, y: deltaY });
-      }
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      
+      const deltaX = (e.clientX - centerX) * depth * intensity;
+      const deltaY = (e.clientY - centerY) * depth * intensity;
+      
+      setOffset({ x: deltaX, y: deltaY });
     };
 
     // Handler para giroscópio (mobile)
@@ -135,7 +136,13 @@ export function useParallax({ depth, intensity = 0.01 }: ParallaxOptions) {
     };
 
     // Configurar listeners baseado no tipo de dispositivo
-    if (isMobile || isTouchDevice) {
+    // Priorizar desktop se detectado
+    if (isDesktop || (!isMobile && !isTouchDevice)) {
+      // Desktop: usar mouse
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => window.removeEventListener("mousemove", handleMouseMove);
+    } else if (isMobile || isTouchDevice) {
+      // Mobile: tentar giroscópio primeiro
       // No Android, tentar ativar imediatamente e também após primeira interação
       if (isAndroid && supportsGyro) {
         // Tentar ativar imediatamente
@@ -173,7 +180,7 @@ export function useParallax({ depth, intensity = 0.01 }: ParallaxOptions) {
         window.removeEventListener('touchmove', handleTouchMove);
       };
     } else {
-      // Desktop: usar mouse
+      // Fallback: usar mouse mesmo que não detectado como desktop
       window.addEventListener("mousemove", handleMouseMove);
       return () => window.removeEventListener("mousemove", handleMouseMove);
     }
