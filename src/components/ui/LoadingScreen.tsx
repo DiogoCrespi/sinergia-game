@@ -2,7 +2,7 @@
  * Tela de carregamento entre personagens
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface LoadingScreenProps {
   isLoading: boolean;
@@ -12,6 +12,7 @@ interface LoadingScreenProps {
 export function LoadingScreen({ isLoading, progress = 0 }: LoadingScreenProps) {
   const [displayProgress, setDisplayProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Animar progresso suavemente e gerenciar visibilidade
   useEffect(() => {
@@ -42,6 +43,124 @@ export function LoadingScreen({ isLoading, progress = 0 }: LoadingScreenProps) {
       return () => clearTimeout(resetTimer);
     }
   }, [isLoading, progress, isVisible]);
+
+  // Renderizar ASCII no Canvas para evitar tradução
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !isVisible) return;
+
+    const asciiText = `          _____           _______                   _____                    _____                    _____                    _____                    _____          
+         /\\    \\         /::\\    \\                 /\\    \\                  /\\    \\                  /\\    \\                  /\\    \\                  /\\    \\         
+        /::\\____\\       /::::\\    \\               /::\\    \\                /::\\    \\                /::\\    \\                /::\\____\\                /::\\    \\        
+       /:::/    /      /::::::\\    \\             /::::\\    \\              /::::\\    \\               \\:::\\    \\              /::::|   |               /::::\\    \\       
+      /:::/    /      /::::::::\\    \\           /::::::\\    \\            /::::::\\    \\               \\:::\\    \\            /:::::|   |              /::::::\\    \\      
+     /:::/    /      /:::/~~\\:::\\    \\         /:::/\\:::\\    \\          /:::/\\:::\\    \\               \\:::\\    \\          /::::::|   |             /:::/\\:::\\    \\     
+    /:::/    /      /:::/    \\:::\\    \\       /:::/__\\:::\\    \\        /:::/  \\:::\\    \\               \\:::\\    \\        /:::/|::|   |            /:::/  \\:::\\    \\    
+   /:::/    /      /:::/    / \\:::\\    \\     /::::\\   \\:::\\    \\      /:::/    \\:::\\    \\              /::::\\    \\      /:::/ |::|   |           /:::/    \\:::\\    \\   
+  /:::/    /      /:::/____/   \\:::\\____\\   /::::::\\   \\:::\\    \\    /:::/    / \\:::\\    \\    ____    /::::::\\    \\    /:::/  |::|   | _____    /:::/    / \\:::\\    \\  
+ /:::/    /      |:::|    |     |:::|    | /:::/\\:::\\   \\:::\\    \\  /:::/    /   \\:::\\ ___\\  /\\   \\  /:::/\\:::\\    \\  /:::/   |::|   |/\\    \\  /:::/    /   \\:::\\ ___\\ 
+/:::/____/       |:::|____|     |:::|    |/:::/  \\:::\\   \\:::\\____\\/:::/____/     \\:::|    |/::\\   \\/:::/  \\:::\\____\\/:: /    |::|   /::\\____\\/:::/____/  ___\\:::|    |
+\\:::\\    \\        \\:::\\    \\   /:::/    / \\::/    \\:::\\  /:::/    /\\:::\\    \\     /:::|____|\\:::\\  /:::/    \\::/    /\\::/    /|::|  /:::/    /\\:::\\    \\ /\\  /:::|____|
+ \\:::\\    \\        \\:::\\    \\ /:::/    /   \\/____/ \\:::\\/:::/    /  \\:::\\    \\   /:::/    /  \\:::\\/:::/    / \\/____/  \\/____/ |::| /:::/    /  \\:::\\    /::\\ \\::/    / 
+  \\:::\\    \\        \\:::\\    /:::/    /             \\::::::/    /    \\:::\\    \\ /:::/    /    \\::::::/    /                   |::|/:::/    /    \\:::\\   \\:::\\ \\/____/  
+   \\:::\\    \\        \\:::\\__/:::/    /               \\::::/    /      \\:::\\    /:::/    /      \\::::/____/                    |::::::/    /      \\:::\\   \\:::\\____\\    
+    \\:::\\    \\        \\::::::::/    /                /:::/    /        \\:::\\  /:::/    /        \\:::\\    \\                    |:::::/    /        \\:::\\  /:::/    /    
+     \\:::\\    \\        \\::::::/    /                /:::/    /          \\:::\\/:::/    /          \\:::\\    \\                   |::::/    /          \\:::\\/:::/    /     
+      \\:::\\    \\        \\::::/    /                /:::/    /            \\::::::/    /            \\:::\\    \\                  /:::/    /            \\::::::/    /      
+       \\:::\\____\\        \\::/____/                /:::/    /              \\::::/    /              \\:::\\____\\                /:::/    /              \\::::/    /       
+        \\::/    /                                 \\::/    /                \\::/____/                \\::/    /                \\::/    /                \\::/____/        
+         \\/____/                                   \\/____/                                           \\/____/                  \\/____/                                  `;
+
+    const renderCanvas = () => {
+      if (!canvas) return;
+
+      const lines = asciiText.split('\n').filter(line => line.trim().length > 0);
+      
+      // Calcular largura disponível (considerando padding do container)
+      const containerMaxWidth = Math.min(800, window.innerWidth * 0.95);
+      const padding = window.innerWidth < 640 ? 20 : 40;
+      const availableWidth = containerMaxWidth - padding;
+      
+      // Encontrar a linha mais longa
+      const maxLineLength = Math.max(...lines.map(line => line.length));
+      
+      // Calcular tamanho de fonte baseado na largura disponível e comprimento da linha
+      // Usar clamp para garantir tamanhos mínimos e máximos responsivos
+      const baseFontSize = availableWidth / maxLineLength;
+      const fontSize = Math.max(
+        window.innerWidth < 640 ? 1.5 : 2, 
+        Math.min(window.innerWidth < 640 ? 4 : 6, baseFontSize * 0.9)
+      );
+      const lineHeight = fontSize * 1.3;
+      
+      // Calcular dimensões do canvas
+      const canvasWidth = availableWidth;
+      const canvasHeight = lines.length * lineHeight;
+      
+      // Ajustar DPI para alta resolução
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = canvasWidth * dpr;
+      canvas.height = canvasHeight * dpr;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      // Escalar contexto para alta resolução
+      ctx.scale(dpr, dpr);
+      
+      // Limpar canvas
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      
+      // Configurar estilo
+      ctx.font = `${fontSize}px monospace`;
+      ctx.fillStyle = '#60a5fa';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      
+      // Aplicar sombras
+      ctx.shadowColor = 'rgba(255, 0, 0, 0.8)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      
+      // Desenhar texto
+      lines.forEach((line, index) => {
+        ctx.fillText(line, 0, index * lineHeight);
+      });
+      
+      // Aplicar segunda sombra (laranja) - redesenhar com nova sombra
+      ctx.shadowColor = 'rgba(251, 155, 0, 0.5)';
+      ctx.shadowBlur = 20;
+      lines.forEach((line, index) => {
+        ctx.fillText(line, 0, index * lineHeight);
+      });
+      
+      // Ajustar estilo do canvas para exibição e centralização
+      // Usar largura fixa calculada e centralizar com margin auto, com pequeno offset para direita
+      canvas.style.width = `${canvasWidth}px`;
+      canvas.style.height = `${canvasHeight}px`;
+      canvas.style.display = 'block';
+      canvas.style.marginLeft = 'auto';
+      canvas.style.marginRight = 'auto';
+      canvas.style.marginTop = '0';
+      canvas.style.marginBottom = 'clamp(0.5rem, 2vw, 2rem)';
+      // Adicionar pequeno offset para direita
+      canvas.style.transform = 'translateX(70px)';
+    };
+
+    // Renderizar inicialmente
+    renderCanvas();
+
+    // Adicionar listener para redimensionamento
+    const handleResize = () => {
+      renderCanvas();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isVisible]);
 
   if (!isLoading && !isVisible) return null;
 
@@ -81,54 +200,32 @@ export function LoadingScreen({ isLoading, progress = 0 }: LoadingScreenProps) {
           position: "relative",
           zIndex: 1,
           width: "100%",
-          maxWidth: "800px",
-          padding: "2rem",
+          maxWidth: "min(800px, 95vw)",
+          padding: "clamp(1rem, 3vw, 2rem)",
           textAlign: "center",
         }}
       >
-        {/* Texto ASCII - SINERGIA */}
-        <pre
+        {/* Texto ASCII - SINERGIA renderizado como Canvas (não traduzível) */}
+        <canvas
+          ref={canvasRef}
           style={{
-            fontFamily: "monospace",
-            fontSize: "0.3rem",
-            lineHeight: "0.45rem",
-            color: "#60a5fa",
-            textShadow: "0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(251, 155, 0, 0.5)",
-            marginBottom: "2rem",
-            whiteSpace: "pre",
-            overflow: "hidden",
-            letterSpacing: "0.05em",
+            display: 'block',
+            margin: '0 auto',
+            marginBottom: 'clamp(0.5rem, 2vw, 2rem)',
+            maxWidth: '100%',
+            imageRendering: 'crisp-edges',
           }}
-        >
-{`          _____           _______                   _____                    _____                    _____                    _____                    _____          
-         /\\    \\         /::\\    \\                 /\\    \\                  /\\    \\                  /\\    \\                  /\\    \\                  /\\    \\         
-        /::\\____\\       /::::\\    \\               /::\\    \\                /::\\    \\                /::\\    \\                /::\\____\\                /::\\    \\        
-       /:::/    /      /::::::\\    \\             /::::\\    \\              /::::\\    \\               \\:::\\    \\              /::::|   |               /::::\\    \\       
-      /:::/    /      /::::::::\\    \\           /::::::\\    \\            /::::::\\    \\               \\:::\\    \\            /:::::|   |              /::::::\\    \\      
-     /:::/    /      /:::/~~\\:::\\    \\         /:::/\\:::\\    \\          /:::/\\:::\\    \\               \\:::\\    \\          /::::::|   |             /:::/\\:::\\    \\     
-    /:::/    /      /:::/    \\:::\\    \\       /:::/__\\:::\\    \\        /:::/  \\:::\\    \\               \\:::\\    \\        /:::/|::|   |            /:::/  \\:::\\    \\    
-   /:::/    /      /:::/    / \\:::\\    \\     /::::\\   \\:::\\    \\      /:::/    \\:::\\    \\              /::::\\    \\      /:::/ |::|   |           /:::/    \\:::\\    \\   
-  /:::/    /      /:::/____/   \\:::\\____\\   /::::::\\   \\:::\\    \\    /:::/    / \\:::\\    \\    ____    /::::::\\    \\    /:::/  |::|   | _____    /:::/    / \\:::\\    \\  
- /:::/    /      |:::|    |     |:::|    | /:::/\\:::\\   \\:::\\    \\  /:::/    /   \\:::\\ ___\\  /\\   \\  /:::/\\:::\\    \\  /:::/   |::|   |/\\    \\  /:::/    /   \\:::\\ ___\\ 
-/:::/____/       |:::|____|     |:::|    |/:::/  \\:::\\   \\:::\\____\\/:::/____/     \\:::|    |/::\\   \\/:::/  \\:::\\____\\/:: /    |::|   /::\\____\\/:::/____/  ___\\:::|    |
-\\:::\\    \\        \\:::\\    \\   /:::/    / \\::/    \\:::\\  /:::/    /\\:::\\    \\     /:::|____|\\:::\\  /:::/    \\::/    /\\::/    /|::|  /:::/    /\\:::\\    \\ /\\  /:::|____|
- \\:::\\    \\        \\:::\\    \\ /:::/    /   \\/____/ \\:::\\/:::/    /  \\:::\\    \\   /:::/    /  \\:::\\/:::/    / \\/____/  \\/____/ |::| /:::/    /  \\:::\\    /::\\ \\::/    / 
-  \\:::\\    \\        \\:::\\    /:::/    /             \\::::::/    /    \\:::\\    \\ /:::/    /    \\::::::/    /                   |::|/:::/    /    \\:::\\   \\:::\\ \\/____/  
-   \\:::\\    \\        \\:::\\__/:::/    /               \\::::/    /      \\:::\\    /:::/    /      \\::::/____/                    |::::::/    /      \\:::\\   \\:::\\____\\    
-    \\:::\\    \\        \\::::::::/    /                /:::/    /        \\:::\\  /:::/    /        \\:::\\    \\                    |:::::/    /        \\:::\\  /:::/    /    
-     \\:::\\    \\        \\::::::/    /                /:::/    /          \\:::\\/:::/    /          \\:::\\    \\                   |::::/    /          \\:::\\/:::/    /     
-      \\:::\\    \\        \\::::/    /                /:::/    /            \\::::::/    /            \\:::\\    \\                  /:::/    /            \\::::::/    /      
-       \\:::\\____\\        \\::/____/                /:::/    /              \\::::/    /              \\:::\\____\\                /:::/    /              \\::::/    /       
-        \\::/    /                                 \\::/    /                \\::/____/                \\::/    /                \\::/    /                \\::/____/        
-         \\/____/                                   \\/____/                                           \\/____/                  \\/____/                                  `}
-        </pre>
+          translate="no"
+          data-translate="no"
+        />
 
         {/* Título */}
         <h2
-          className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500"
+          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500"
           style={{
             textShadow: "0 4px 12px rgba(0, 0, 0, 0.8)",
             letterSpacing: "0.05em",
+            marginBottom: "clamp(1rem, 4vw, 2rem)",
           }}
         >
           Carregando...
@@ -160,7 +257,7 @@ export function LoadingScreen({ isLoading, progress = 0 }: LoadingScreenProps) {
 
         {/* Texto de progresso */}
         <p
-          className="text-lg text-gray-200"
+          className="text-sm sm:text-base md:text-lg text-gray-200"
           style={{
             textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
           }}

@@ -237,7 +237,7 @@ export class NarrativeManager {
     if (selected.tags && selected.tags.length > 0) {
       // Nota: Isso será feito no store, não aqui
       // Por enquanto, apenas log
-      if (process.env.NODE_ENV === "development") {
+      if (import.meta.env.DEV) {
         console.log(`Tags usadas: ${selected.tags.join(", ")}`);
       }
     }

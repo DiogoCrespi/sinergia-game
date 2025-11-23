@@ -12,9 +12,20 @@ export const ConscienceNarrator = memo(function ConscienceNarrator({ comment }: 
   if (!comment) return null;
 
   return (
-    <div className="absolute bottom-4 left-4 right-4">
-      <div className="bg-black/60 backdrop-blur-sm border-l-4 border-yellow-500 p-4 rounded-r-lg">
-        <p className="text-sm text-gray-300 italic font-light">
+    <div 
+      className="absolute left-0 right-0"
+      style={{
+        bottom: 'clamp(0.5rem, 2vw, 1rem)',
+        padding: '0 clamp(0.5rem, 2vw, 1rem)'
+      }}
+    >
+      <div 
+        className="bg-black/60 backdrop-blur-sm border-l-4 border-yellow-500 rounded-r-lg"
+        style={{
+          padding: 'clamp(0.5rem, 2vw, 1rem)'
+        }}
+      >
+        <p className="text-xs sm:text-sm text-gray-300 italic font-light break-words">
           <span className="text-yellow-400 font-semibold">Consciência:</span>{" "}
           {comment}
         </p>

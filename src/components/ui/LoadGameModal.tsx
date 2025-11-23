@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useGameStore } from "../../store/gameStore";
-import { listSaves, getSavePreview, formatTimestamp, deleteSave } from "../../utils/saveManager";
+import { listSaves, getSavePreview, deleteSave } from "../../utils/saveManager";
 
 interface LoadGameModalProps {
   isOpen: boolean;

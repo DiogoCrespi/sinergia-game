@@ -7,7 +7,7 @@ import { useGameStore } from "../../store/gameStore";
 import { LoadGameModal } from "../ui/LoadGameModal";
 
 export function MainMenu() {
-  const { startGame, setCurrentState } = useGameStore();
+  const { startGame } = useGameStore();
   const [showLoadModal, setShowLoadModal] = useState(false);
 
   const handleStartGame = async () => {

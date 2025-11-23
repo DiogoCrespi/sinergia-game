@@ -47,9 +47,8 @@ export function generateContextualTags(gameState: GameState): string[] {
 
   // Tags baseadas em escolhas anteriores (últimas 3 escolhas)
   if (gameState.choicesHistory.length > 0) {
-    // Se as últimas escolhas foram todas genuínas ou manipuladoras
-    const recentChoices = gameState.choicesHistory.slice(-3);
     // Isso pode ser expandido no futuro para análise mais complexa
+    // das últimas escolhas para gerar tags contextuais adicionais
   }
 
   return tags;

@@ -14,10 +14,9 @@ import { NarrativeManager } from "../core/NarrativeManager";
 import {
   DEFAULT_CHARACTER_SEQUENCE,
   getNextCharacter,
-  areAllCharactersMet,
   getTreeId,
 } from "../core/CharacterSequence";
-import { saveGame as saveGameUtil, loadGame as loadGameUtil, type SaveData } from "../utils/saveManager";
+import { saveGame as saveGameUtil, loadGame as loadGameUtil } from "../utils/saveManager";
 
 // Instância singleton do NarrativeManager
 const narrativeManager = new NarrativeManager();

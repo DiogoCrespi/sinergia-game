@@ -70,36 +70,33 @@ export function DialogueUI() {
     <>
       {/* Texto do diálogo - posicionado no meio superior, centralizado na página */}
       <div 
+        className="fixed left-0 right-0 w-screen z-40 pointer-events-none flex justify-center items-start"
         style={{
-          position: 'fixed',
-          top: '5rem',
-          left: '0',
-          right: '0',
-          width: '100vw',
-          zIndex: 40,
-          pointerEvents: 'none',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          padding: '0 2rem'
+          top: 'clamp(1rem, 5vh, 5rem)',
+          padding: '0 clamp(0.5rem, 2vw, 2rem)',
+          maxHeight: 'calc(100vh - 200px)',
+          overflowY: 'auto'
         }}
       >
         <div 
+          className="rounded-lg pointer-events-auto text-center w-full"
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(4px)',
-            borderRadius: '0.5rem',
-            padding: '1rem 1.5rem',
-            pointerEvents: 'auto',
-            textAlign: 'center',
-            maxWidth: '64rem',
-            width: '100%'
+            padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)',
+            maxWidth: 'min(64rem, 95vw)',
+            maxHeight: 'calc(100vh - 250px)',
+            overflowY: 'auto',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '0.5rem'
           }}
         >
-          <h3 className="text-2xl font-bold mb-3 text-blue-300">
+          <h3 className="text-base sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-blue-300">
             {currentNode.characterName}
           </h3>
-          <p className="text-lg leading-relaxed text-gray-100">
+          <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-100 break-words">
             {currentNode.dialogueText}
           </p>
         </div>
@@ -108,17 +105,22 @@ export function DialogueUI() {
       {/* Opções - fixadas na parte inferior da página, sobre a mesa */}
       {currentNode.options.length > 0 && (
         <div 
+          className="flex flex-col sm:flex-row"
           style={{
             position: 'fixed',
             bottom: '0px',
             left: '0px',
             right: '0px',
             width: '100vw',
-            zIndex: 9999,
-            padding: '0 2rem 1.5rem 2rem',
-            display: 'flex',
-            gap: '1rem',
-            pointerEvents: 'auto'
+            height: 'auto',
+            zIndex: 100,
+            padding: '0 clamp(0.5rem, 2vw, 2rem) clamp(0.75rem, 3vw, 1.5rem)',
+            gap: 'clamp(0.5rem, 2vw, 1rem)',
+            maxHeight: '40vh',
+            overflowY: 'auto',
+            pointerEvents: 'auto',
+            alignItems: 'flex-end',
+            justifyContent: 'center'
           }}
         >
           {(() => {
@@ -158,7 +160,15 @@ export function DialogueUI() {
 
       {/* Comentário da Consciência - também na parte inferior */}
       {conscienceComment && (
-        <div className="fixed bottom-20 left-0 right-0 z-45 px-8 pointer-events-none">
+        <div 
+          className="fixed left-0 right-0 z-[45] pointer-events-none"
+          style={{
+            bottom: currentNode.options.length > 0 
+              ? 'clamp(120px, 30vh, 200px)' 
+              : 'clamp(20px, 5vh, 80px)',
+            padding: '0 clamp(1rem, 4vw, 2rem)'
+          }}
+        >
           <div className="pointer-events-auto">
             <ConscienceNarrator comment={conscienceComment} />
           </div>

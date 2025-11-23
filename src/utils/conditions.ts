@@ -30,7 +30,7 @@ export function checkConditions(
       );
 
       // Log para debug (apenas em desenvolvimento)
-      if (process.env.NODE_ENV === "development" && !result) {
+      if (import.meta.env.DEV && !result) {
         console.log(
           `Condição falhou: ${condition.type} ${condition.operator} ${condition.value} (atual: ${value})`
         );
