@@ -9,6 +9,7 @@ import { LoadGameModal } from "../ui/LoadGameModal";
 export function MainMenu() {
   const { startGame } = useGameStore();
   const [showLoadModal, setShowLoadModal] = useState(false);
+  const [showCreditsModal, setShowCreditsModal] = useState(false);
 
   const handleStartGame = async () => {
     try {
@@ -110,10 +111,7 @@ export function MainMenu() {
           </button>
 
           <button
-            onClick={() => {
-              // Placeholder para futuras funcionalidades
-              alert("Funcionalidade em desenvolvimento");
-            }}
+            onClick={() => setShowCreditsModal(true)}
             style={{
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)'
@@ -129,6 +127,107 @@ export function MainMenu() {
           isOpen={showLoadModal}
           onClose={() => setShowLoadModal(false)}
         />
+
+        {/* Modal de Créditos */}
+        {showCreditsModal && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 1000,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem'
+            }}
+            onClick={() => setShowCreditsModal(false)}
+          >
+            {/* Backdrop */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)'
+              }}
+            />
+            
+            {/* Conteúdo do Modal */}
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: '1rem',
+                padding: '2.5rem',
+                maxWidth: '32rem',
+                width: '100%',
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.7)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2
+                className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 text-center"
+                style={{
+                  textShadow: '0 4px 12px rgba(0, 0, 0, 0.8)'
+                }}
+              >
+                Créditos
+              </h2>
+              
+              <div className="space-y-4 text-center">
+                <div>
+                  <p
+                    className="text-xl text-white mb-2 font-semibold"
+                    style={{
+                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
+                    }}
+                  >
+                    Psicologia e Desenvolvimento Humano
+                  </p>
+                </div>
+                
+                <div>
+                  <p
+                    className="text-lg text-gray-200"
+                    style={{
+                      textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)'
+                    }}
+                  >
+                    Dev: Diogo
+                  </p>
+                </div>
+                
+                <div>
+                  <p
+                    className="text-base text-gray-300"
+                    style={{
+                      textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)'
+                    }}
+                  >
+                    Atividade: Macrocompetência Amabilidade
+                  </p>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => setShowCreditsModal(false)}
+                style={{
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  marginTop: '2rem'
+                }}
+                className="w-full px-6 py-3 bg-blue-600/90 hover:bg-blue-700/90 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Instruções */}
         <div 
