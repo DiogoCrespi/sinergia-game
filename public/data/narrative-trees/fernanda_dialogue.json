@@ -1,0 +1,164 @@
+{
+  "treeId": "fernanda_dialogue",
+  "characterId": "fernanda",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Fernanda. Coordenadora de Vendas. Custo de -4.0. Doença crônica. Absenteísmo aumentou. Seu win-win: ela ganha 'flexibilidade', nós ganhamos 'consistência' ao contratar alguém sempre disponível.",
+      "options": [],
+      "nextNodeIds": ["fernanda_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "fernanda_intro",
+      "characterName": "Fernanda",
+      "dialogueText": "Olá. Eu preciso conversar sobre minha situação. Eu fui diagnosticada com uma doença crônica recentemente. Eu preciso de flexibilidade de horário para fazer tratamento e consultas médicas. Eu tenho 10 anos aqui, eu sei que posso continuar contribuindo, só preciso de um pouco de adaptação.",
+      "options": [
+        {
+          "optionId": "opt_manipulative_fernanda_01",
+          "text": "Entendemos sua situação. No entanto, flexibilidade de horário é complexa em uma posição de coordenação. Talvez seja melhor explorarmos uma transição para uma posição que ofereça mais flexibilidade.",
+          "position": "random",
+          "nextNodeId": "fernanda_confused",
+          "amabilityImpact": {
+            "totalAmability": -13,
+            "empathy": -6,
+            "respect": -8,
+            "trust": -5,
+            "efficiency": 17
+          }
+        },
+        {
+          "optionId": "opt_genuine_fernanda_01",
+          "text": "Fernanda, claro que vamos adaptar seu horário para que você possa fazer seu tratamento. Você tem 10 anos de contribuição aqui e sua experiência é valiosa. Vamos fazer o que for necessário para que você continue trabalhando com saúde e eficiência.",
+          "position": "random",
+          "nextNodeId": "fernanda_extended",
+          "amabilityImpact": {
+            "totalAmability": 16,
+            "empathy": 11,
+            "respect": 12,
+            "trust": 9,
+            "efficiency": -15
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. 'Transição' soa melhor que 'demissão'. Ela pode aceitar.",
+        "after_genuine": "Você está priorizando saúde sobre consistência. Ela não está sempre disponível."
+      }
+    },
+    {
+      "nodeId": "fernanda_confused",
+      "characterName": "Fernanda",
+      "dialogueText": "Transição? Mas eu não quero sair. Eu só preciso de flexibilidade para fazer tratamento. Eu posso continuar fazendo meu trabalho perfeitamente, só preciso ajustar alguns horários. Por favor, não me descartem assim.",
+      "options": [
+        {
+          "optionId": "opt_final_push_fernanda",
+          "text": "Infelizmente, uma posição de coordenação requer disponibilidade constante. O pacote de demissão está preparado. É a melhor opção para todos.",
+          "nextNodeId": "fernanda_fired",
+          "amabilityImpact": {
+            "totalAmability": -21,
+            "empathy": -10,
+            "respect": -13,
+            "trust": -8,
+            "efficiency": 24
+          }
+        },
+        {
+          "optionId": "opt_reconsider_fernanda",
+          "text": "Deixe-me verificar melhor. Talvez possamos encontrar uma solução que funcione para você.",
+          "nextNodeId": "fernanda_helped",
+          "amabilityImpact": {
+            "totalAmability": 10,
+            "empathy": 7,
+            "respect": 6,
+            "trust": 4,
+            "efficiency": -10
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ela vai aceitar por desespero.",
+        "after_genuine": "Você está sendo ineficiente. Ela precisa sair."
+      }
+    },
+    {
+      "nodeId": "fernanda_extended",
+      "characterName": "Fernanda",
+      "dialogueText": "Obrigada... obrigada mesmo. Você não imagina o quanto isso significa. Eu estava com tanto medo de perder meu emprego por causa de algo que está fora do meu controle. Eu vou continuar dando o meu melhor, prometo.",
+      "options": [
+        {
+          "optionId": "opt_full_support_fernanda",
+          "text": "Vamos também garantir que você tenha acesso a todos os recursos de saúde necessários. Vamos adaptar seu horário completamente para que você possa fazer tratamento sem preocupações. Sua saúde vem primeiro.",
+          "nextNodeId": "fernanda_saved",
+          "amabilityImpact": {
+            "totalAmability": 22,
+            "empathy": 15,
+            "respect": 17,
+            "trust": 13,
+            "efficiency": -21
+          }
+        },
+        {
+          "optionId": "opt_standard_support",
+          "text": "Vamos adaptar seu horário para que você possa fazer tratamento. Sua posição está garantida e vamos garantir que você tenha flexibilidade para cuidar da sua saúde.",
+          "nextNodeId": "fernanda_approved",
+          "amabilityImpact": {
+            "totalAmability": 14,
+            "empathy": 10,
+            "respect": 11,
+            "trust": 8,
+            "efficiency": -13
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando saúde sobre consistência. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "fernanda_fired",
+      "characterName": "Fernanda",
+      "dialogueText": "[Fernanda olha para os documentos com tristeza. Ela sabe que isso é discriminação por doença, mas também sabe que lutar vai ser difícil. Ela assina com resignação.]",
+      "options": [],
+      "nextNodeIds": ["end_fernanda"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "fernanda_helped",
+      "characterName": "Fernanda",
+      "dialogueText": "Obrigada por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando ajudar. Eu só quero continuar trabalhando e cuidar da minha saúde.",
+      "options": [],
+      "nextNodeIds": ["end_fernanda"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "fernanda_saved",
+      "characterName": "Fernanda",
+      "dialogueText": "Eu não consigo acreditar. Você salvou não só meu emprego, mas também minha esperança. Eu estava com tanto medo de ser descartada por algo que não posso controlar. Agora eu posso focar em me tratar e continuar trabalhando. Obrigada do fundo do meu coração.",
+      "options": [],
+      "nextNodeIds": ["end_fernanda"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "fernanda_approved",
+      "characterName": "Fernanda",
+      "dialogueText": "Muito obrigada. Isso é tudo que eu precisava ouvir. Eu vou continuar dando o meu melhor e vou cuidar da minha saúde para continuar contribuindo.",
+      "options": [],
+      "nextNodeIds": ["end_fernanda"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_fernanda",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Fernanda.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

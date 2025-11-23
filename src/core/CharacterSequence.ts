@@ -4,12 +4,19 @@
 
 /**
  * Sequência padrão de personagens
+ * Ordem: Personagens base (1-4) seguidos por personagens de expansão (5-10)
  */
 export const DEFAULT_CHARACTER_SEQUENCE = [
-  "carlos",
-  "sara",
-  "ana",
-  "marcos",
+  "carlos",    // 1. Funcionário de meia-idade, filha doente
+  "sara",      // 2. Desenvolvedora júnior, mãe idosa com Alzheimer
+  "ana",       // 3. 58 anos, 30 anos de empresa, sendo substituída por IA
+  "marcos",    // 4. 24 anos, recém-contratado, não está performando
+  "rafael",    // 5. Gerente de Projetos, burnout severo
+  "juliana",   // 6. Analista de Marketing, grávida de 6 meses
+  "roberto",   // 7. Analista de Dados, limitação física
+  "patricia",  // 8. Contadora Sênior, denunciou irregularidades
+  "lucas",     // 9. Designer Gráfico, sofrendo discriminação
+  "fernanda",  // 10. Coordenadora de Vendas, doença crônica
 ];
 
 /**

@@ -1,197 +1,81 @@
 /**
- * Componente 3D de personagem
- * Suporta modelos GLTF/GLB e fallback para placeholder
+ * Componente 2D de personagem
+ * Renderiza personagens como imagens PNG em vez de modelos 3D
  */
 
-import { Suspense, useEffect, useRef, useState } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { Suspense } from "react";
+import { useTexture } from "@react-three/drei";
 import { useGameStore } from "../../store/gameStore";
-import type { Emotion } from "../../types/character";
-import { getCharacterConfig } from "./characterConfig";
-import * as THREE from "three";
+import { useParallax } from "../../hooks/useParallax";
+import { OBJECT_DISTANCES, OBJECT_SIZES, PARALLAX_CONFIG } from "./sceneConfig";
 
 interface CharacterProps {
   characterId?: string;
-  emotion?: Emotion;
   position?: [number, number, number];
   scale?: number | [number, number, number];
-  rotation?: [number, number, number];
 }
 
-// Cache de modelos carregados.....
-const modelCache = new Map<string, any>();
+// Lista de todos os personagens disponíveis (com imagens PNG)
+const ALL_CHARACTERS = [
+  "carlos", "sara", "ana", "marcos", 
+  "rafael", "juliana", "roberto", "patricia", "lucas", "fernanda"
+];
 
-// Lista de personagens válidos que têm modelos 3D disponíveis
-const VALID_CHARACTERS = ["carlos", "sara", "ana", "marcos"];
-
-// Personagens especiais que não devem renderizar modelo 3D
+// Personagens especiais que não devem renderizar
 const SPECIAL_CHARACTERS = ["sistema", "consciência", "consciencia"];
 
 /**
- * Verifica se um personagem é válido para renderização 3D
+ * Verifica se um personagem é válido para renderização
  */
 function isValidCharacter(characterId: string | null | undefined): boolean {
   if (!characterId) return false;
   const normalized = characterId.toLowerCase();
-  return VALID_CHARACTERS.includes(normalized) && !SPECIAL_CHARACTERS.includes(normalized);
+  return ALL_CHARACTERS.includes(normalized) && !SPECIAL_CHARACTERS.includes(normalized);
 }
 
 /**
- * Componente de placeholder (fallback quando modelo não carrega)
+ * Componente interno que renderiza personagem como sprite 2D
  */
-function CharacterPlaceholder({ position = [0, 0, -2] }: { position?: [number, number, number] }) {
-  return (
-    <group position={position}>
-      {/* Cabeça */}
-      <mesh position={[0, 1.6, 0]}>
-        <sphereGeometry args={[0.2, 32, 32]} />
-        <meshStandardMaterial color="#fdbcb4" />
-      </mesh>
-
-      {/* Corpo */}
-      <mesh position={[0, 1.2, 0]}>
-        <boxGeometry args={[0.5, 0.8, 0.3]} />
-        <meshStandardMaterial color="#4a5568" />
-      </mesh>
-
-      {/* Braços */}
-      <mesh position={[-0.4, 1.2, 0]}>
-        <boxGeometry args={[0.15, 0.6, 0.15]} />
-        <meshStandardMaterial color="#fdbcb4" />
-      </mesh>
-      <mesh position={[0.4, 1.2, 0]}>
-        <boxGeometry args={[0.15, 0.6, 0.15]} />
-        <meshStandardMaterial color="#fdbcb4" />
-      </mesh>
-
-      {/* Pernas */}
-      <mesh position={[-0.15, 0.5, 0]}>
-        <boxGeometry args={[0.2, 0.5, 0.2]} />
-        <meshStandardMaterial color="#2d3748" />
-      </mesh>
-      <mesh position={[0.15, 0.5, 0]}>
-        <boxGeometry args={[0.2, 0.5, 0.2]} />
-        <meshStandardMaterial color="#2d3748" />
-      </mesh>
-    </group>
-  );
-}
-
-/**
- * Componente interno que carrega o modelo GLTF
- * IMPORTANTE: Este componente só deve ser renderizado com personagens válidos
- * (verificado no componente Character antes de renderizar)
- */
-function CharacterModel({ 
+function CharacterSprite({ 
   characterId, 
-  emotion = "neutral",
-  position = [0, 0, -2],
-  scale = 1,
-  rotation = [0, 0, 0]
+  position = [0, 0, OBJECT_DISTANCES.character],
+  scale = 1
 }: CharacterProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  // Tentar carregar modelo GLTF
-  // useGLTF precisa ser chamado sempre no topo (regra dos hooks)
-  // Normalizar characterId para minúsculas para garantir consistência
-  // NOTA: Este componente só deve ser renderizado com personagens válidos
-  // (verificado no componente Character antes de renderizar)
   const normalizedCharacterId = characterId?.toLowerCase() || "";
-  const modelPath = `/models/characters/${normalizedCharacterId}.glb`;
+  const imagePath = `/models/characters/${normalizedCharacterId}.png`;
   
-  // useGLTF retorna um objeto com scene e animations
-  // IMPORTANTE: useGLTF é um hook e deve ser chamado sempre no topo
-  // Segundo parâmetro false = usar cache (recomendado)
-  // Nota: Como já verificamos que o personagem é válido antes de renderizar,
-  // o useGLTF não deve tentar carregar arquivos inexistentes
-  const gltf = useGLTF(modelPath, false);
-
-  // Clonar cena para evitar problemas de reutilização (mesmo que seja undefined)
-  const scene = gltf?.scene?.clone();
-  const animations = gltf?.animations || [];
+  // Carregar textura da imagem
+  const texture = useTexture(imagePath);
   
-  // Sistema de animações (se disponível)
-  // IMPORTANTE: useAnimations deve ser chamado sempre, mesmo se não houver animações
-  const { actions, names } = useAnimations(animations, groupRef);
+  // Parallax muito sutil para personagem (camada próxima) - valores conforme Visual.md
+  const parallax = useParallax({ 
+    depth: PARALLAX_CONFIG.depths.character, 
+    intensity: PARALLAX_CONFIG.intensity 
+  });
   
-  // Debug: log do caminho do modelo (apenas em desenvolvimento)
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      console.log(`Tentando carregar modelo: ${modelPath}`);
-    }
-  }, [modelPath]);
-  
-  // Armazenar no cache se ainda não estiver (após hooks)
-  useEffect(() => {
-    if (gltf?.scene && !modelCache.has(modelPath)) {
-      modelCache.set(modelPath, { scene: gltf.scene, animations: gltf.animations });
-    }
-  }, [gltf, modelPath]);
-
-  // Verificar se o modelo foi carregado corretamente (DEPOIS de todos os hooks)
-  if (!gltf || !gltf.scene || !scene) {
-    // Modelo não encontrado, usar placeholder
-    console.warn(`Modelo não encontrado ou inválido: ${modelPath}. Verifique se o arquivo existe em public/models/characters/`);
-    return <CharacterPlaceholder position={position} />;
-  }
-  
-  // Mapear emoção para animação
-  const getAnimationForEmotion = (emotion: Emotion): string | null => {
-    const emotionMap: Record<Emotion, string> = {
-      neutral: "idle",
-      worried: "worried",
-      relieved: "relieved",
-      angry: "angry",
-      happy: "happy",
-      sad: "sad",
-    };
-    
-    const animationName = emotionMap[emotion];
-    return names.includes(animationName) ? animationName : "idle";
-  };
-
-  // Aplicar animação baseada em emoção
-  useEffect(() => {
-    if (!actions || animations.length === 0) return;
-    
-    const animationName = getAnimationForEmotion(emotion);
-    if (animationName && actions[animationName]) {
-      // Fade out animação atual
-      Object.values(actions).forEach((action) => {
-        if (action?.isRunning()) {
-          action.fadeOut(0.3);
-        }
-      });
-      
-      // Fade in nova animação
-      const newAction = actions[animationName];
-      if (newAction) {
-        newAction.reset().fadeIn(0.3).play();
-      }
-    }
-    
-    return () => {
-      Object.values(actions).forEach((action) => {
-        action?.fadeOut(0.3);
-      });
-    };
-  }, [emotion, actions, animations.length, names]);
-
-  // Renderizar modelo carregado
   // Converter scale para array se for número único
   const scaleArray: [number, number, number] = Array.isArray(scale) 
     ? scale as [number, number, number]
     : [scale, scale, scale];
   
+  // Calcular dimensões do sprite baseado na textura
+  // useTexture retorna uma textura Three.js, acessar dimensões via image se disponível
+  const textureImage = (texture as any).image;
+  const aspectRatio = textureImage && textureImage.width && textureImage.height 
+    ? textureImage.width / textureImage.height 
+    : 0.75; // Default para personagem em pé
+  
+  // Ajustar tamanho do sprite para proporção adequada
+  const spriteHeight = OBJECT_SIZES.characterHeight;
+  const spriteWidth = spriteHeight * aspectRatio;
+  
   return (
-    <group 
-      ref={groupRef} 
-      position={position}
-      scale={scaleArray}
-      rotation={rotation}
+    <sprite 
+      position={[position[0] + parallax.x, position[1] + parallax.y, position[2]]} 
+      scale={[spriteWidth * scaleArray[0], spriteHeight * scaleArray[1], 1]}
     >
-      <primitive object={scene} />
-    </group>
+      <spriteMaterial map={texture} transparent={true} />
+    </sprite>
   );
 }
 
@@ -200,49 +84,34 @@ function CharacterModel({
  */
 export function Character({ 
   characterId: propCharacterId,
-  emotion: propEmotion,
   position: propPosition,
-  scale: propScale,
-  rotation: propRotation
+  scale: propScale
 }: CharacterProps = {}) {
   const { currentCharacter } = useGameStore();
   
   // Usar prop ou store, normalizando para minúsculas
   const characterId = (propCharacterId || currentCharacter)?.toLowerCase();
-  const [currentEmotion, setCurrentEmotion] = useState<Emotion>(propEmotion || "neutral");
   
-  // IMPORTANTE: Todos os hooks devem ser chamados ANTES de qualquer retorno condicional
-  // Atualizar emoção quando prop mudar
-  useEffect(() => {
-    if (propEmotion) {
-      setCurrentEmotion(propEmotion);
-    }
-  }, [propEmotion]);
-  
-  // Obter configuração do personagem (ou usar props se fornecidas)
-  const config = characterId ? getCharacterConfig(characterId) : null;
-  const position = propPosition || config?.position || [0, 0, -2];
-  const scale = propScale !== undefined ? propScale : (config?.scale || 1);
-  const rotation = propRotation || config?.rotation || [0, 0, 0];
+  // Posição ajustada para melhor visibilidade (camada próxima, mas não muito perto)
+  const position = propPosition || [0, 0, OBJECT_DISTANCES.character];
+  const scale = propScale !== undefined ? propScale : 1;
 
   // Se não houver personagem, não renderizar (DEPOIS de todos os hooks)
   if (!characterId) {
     return null;
   }
 
-  // Se o personagem é especial (como "Sistema") ou não é válido, não renderizar modelo 3D
+  // Se o personagem é especial ou não é válido, não renderizar
   if (!isValidCharacter(characterId)) {
     return null;
   }
 
   return (
     <Suspense fallback={null}>
-      <CharacterModel 
+      <CharacterSprite 
         characterId={characterId}
-        emotion={currentEmotion}
         position={position}
         scale={scale}
-        rotation={rotation}
       />
     </Suspense>
   );

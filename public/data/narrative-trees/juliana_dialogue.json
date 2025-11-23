@@ -1,0 +1,164 @@
+{
+  "treeId": "juliana_dialogue",
+  "characterId": "juliana",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Juliana. Analista de Marketing. Custo de -4.8. Grávida de 6 meses. Licença-maternidade custa 4 meses de produtividade. Seu win-win: ela ganha 'tempo para a família', nós ganhamos eficiência ao contratar alguém disponível.",
+      "options": [],
+      "nextNodeIds": ["juliana_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "juliana_intro",
+      "characterName": "Juliana",
+      "dialogueText": "Olá. Eu sei que vocês receberam o comunicado sobre minha gravidez. Eu estou grávida de 6 meses. Eu quero continuar trabalhando até a licença-maternidade, e depois voltar. Eu prometo que vou manter minha produtividade. Eu realmente preciso deste emprego.",
+      "options": [
+        {
+          "optionId": "opt_manipulative_juliana_01",
+          "text": "Entendemos sua situação. Estamos pensando em uma realocação que pode ser melhor para você durante este período. Uma posição que oferece mais flexibilidade para você focar na sua nova prioridade: a maternidade.",
+          "position": "random",
+          "nextNodeId": "juliana_confused",
+          "amabilityImpact": {
+            "totalAmability": -15,
+            "empathy": -8,
+            "respect": -10,
+            "trust": -7,
+            "efficiency": 20
+          }
+        },
+        {
+          "optionId": "opt_genuine_juliana_01",
+          "text": "Juliana, parabéns pela gravidez! Claro que você tem direito à licença-maternidade e ao seu emprego. Vamos garantir que você tenha todo o apoio necessário. Sua saúde e a do bebê são prioridade.",
+          "position": "random",
+          "nextNodeId": "juliana_extended",
+          "amabilityImpact": {
+            "totalAmability": 18,
+            "empathy": 12,
+            "respect": 15,
+            "trust": 10,
+            "efficiency": -18
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. 'Realocação' soa melhor que 'demissão'. Ela pode aceitar.",
+        "after_genuine": "Você está priorizando sentimentos sobre eficiência. Licença-maternidade custa 4 meses de produtividade."
+      }
+    },
+    {
+      "nodeId": "juliana_confused",
+      "characterName": "Juliana",
+      "dialogueText": "Realocação? Mas eu gosto da minha posição atual. E eu tenho direito à licença-maternidade aqui. O que vocês querem dizer com 'realocação'?",
+      "options": [
+        {
+          "optionId": "opt_final_push_juliana",
+          "text": "Infelizmente, não temos uma posição adequada disponível no momento. Mas podemos oferecer um pacote de demissão generoso. É a melhor opção para você focar na maternidade sem preocupações profissionais.",
+          "nextNodeId": "juliana_fired",
+          "amabilityImpact": {
+            "totalAmability": -25,
+            "empathy": -12,
+            "respect": -15,
+            "trust": -10,
+            "efficiency": 28
+          }
+        },
+        {
+          "optionId": "opt_reconsider_juliana",
+          "text": "Deixe-me verificar melhor. Talvez possamos encontrar uma solução que funcione para todos.",
+          "nextNodeId": "juliana_helped",
+          "amabilityImpact": {
+            "totalAmability": 10,
+            "empathy": 7,
+            "respect": 6,
+            "trust": 4,
+            "efficiency": -10
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ela vai aceitar por medo. Grávidas são vulneráveis.",
+        "after_genuine": "Você está sendo ineficiente. Ela precisa sair antes da licença."
+      }
+    },
+    {
+      "nodeId": "juliana_extended",
+      "characterName": "Juliana",
+      "dialogueText": "Obrigada... obrigada mesmo. Eu estava com tanto medo. Eu conheço mulheres que foram demitidas durante a gravidez. Eu estava preparada para o pior. Isso significa muito para mim e para meu bebê.",
+      "options": [
+        {
+          "optionId": "opt_full_support_juliana",
+          "text": "Vamos também garantir que você tenha flexibilidade de horário durante a gravidez, se precisar. E quando você voltar da licença, sua posição estará garantida. Família vem primeiro.",
+          "nextNodeId": "juliana_saved",
+          "amabilityImpact": {
+            "totalAmability": 25,
+            "empathy": 18,
+            "respect": 20,
+            "trust": 15,
+            "efficiency": -25
+          }
+        },
+        {
+          "optionId": "opt_standard_support",
+          "text": "Sua licença-maternidade está garantida conforme a lei. Quando você voltar, sua posição estará aqui esperando por você.",
+          "nextNodeId": "juliana_approved",
+          "amabilityImpact": {
+            "totalAmability": 16,
+            "empathy": 12,
+            "respect": 10,
+            "trust": 8,
+            "efficiency": -15
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando direitos legais sobre eficiência. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "juliana_fired",
+      "characterName": "Juliana",
+      "dialogueText": "[Juliana olha para os documentos, depois para você, com lágrimas nos olhos. Ela sabe que isso é ilegal, mas também sabe que lutar vai custar tempo e dinheiro que ela não tem. Ela assina em silêncio.]",
+      "options": [],
+      "nextNodeIds": ["end_juliana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "juliana_helped",
+      "characterName": "Juliana",
+      "dialogueText": "Obrigada por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando ajudar. Eu só quero ter meu bebê em paz e voltar ao trabalho depois.",
+      "options": [],
+      "nextNodeIds": ["end_juliana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "juliana_saved",
+      "characterName": "Juliana",
+      "dialogueText": "Eu não consigo acreditar. Você salvou não só meu emprego, mas também minha paz de espírito. Eu estava tão estressada, tão preocupada... isso não é bom para o bebê. Agora eu posso focar em ter uma gravidez saudável. Quando eu voltar, vou ser a funcionária mais dedicada que vocês já tiveram. Obrigada do fundo do meu coração.",
+      "options": [],
+      "nextNodeIds": ["end_juliana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "juliana_approved",
+      "characterName": "Juliana",
+      "dialogueText": "Muito obrigada. Isso é tudo que eu precisava ouvir. Eu vou aproveitar minha licença e voltar pronta para trabalhar. Vocês não vão se arrepender.",
+      "options": [],
+      "nextNodeIds": ["end_juliana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_juliana",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Juliana.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

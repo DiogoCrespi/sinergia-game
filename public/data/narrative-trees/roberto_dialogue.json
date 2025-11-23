@@ -1,0 +1,164 @@
+{
+  "treeId": "roberto_dialogue",
+  "characterId": "roberto",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Roberto. Analista de Dados. Custo de -3.5. Desenvolveu limitação física. Adaptações custam mais que sua produtividade. Seu win-win: ele ganha 'descanso', nós ganhamos eficiência ao contratar alguém sem limitações.",
+      "options": [],
+      "nextNodeIds": ["roberto_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "roberto_intro",
+      "characterName": "Roberto",
+      "dialogueText": "Olá. Eu preciso conversar sobre adaptações no meu ambiente de trabalho. Eu desenvolvi uma limitação física recentemente, e preciso de algumas adaptações para continuar trabalhando com eficiência. Eu tenho 8 anos aqui, eu sei que posso continuar contribuindo.",
+      "options": [
+        {
+          "optionId": "opt_manipulative_roberto_01",
+          "text": "Entendemos sua situação. Infelizmente, adaptações do ambiente são complexas e custosas. Talvez seja melhor explorarmos uma transição para uma posição que seja mais adequada às suas novas circunstâncias.",
+          "position": "random",
+          "nextNodeId": "roberto_confused",
+          "amabilityImpact": {
+            "totalAmability": -14,
+            "empathy": -7,
+            "respect": -9,
+            "trust": -6,
+            "efficiency": 19
+          }
+        },
+        {
+          "optionId": "opt_genuine_roberto_01",
+          "text": "Roberto, claro que vamos adaptar o ambiente para você. Você tem 8 anos de contribuição aqui e sua experiência é valiosa. Vamos fazer o que for necessário para que você continue trabalhando com conforto e eficiência.",
+          "position": "random",
+          "nextNodeId": "roberto_extended",
+          "amabilityImpact": {
+            "totalAmability": 17,
+            "empathy": 11,
+            "respect": 13,
+            "trust": 9,
+            "efficiency": -16
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. 'Transição' soa melhor que 'demissão'. Ele pode aceitar.",
+        "after_genuine": "Você está priorizando inclusão sobre eficiência. Adaptações custam caro."
+      }
+    },
+    {
+      "nodeId": "roberto_confused",
+      "characterName": "Roberto",
+      "dialogueText": "Transição? Mas eu não quero sair. Eu só preciso de adaptações simples. Uma mesa ajustável, talvez um suporte para o monitor. Eu posso continuar fazendo meu trabalho perfeitamente. Por favor, não me descartem assim.",
+      "options": [
+        {
+          "optionId": "opt_final_push_roberto",
+          "text": "Infelizmente, não temos uma posição adequada disponível que não requeira adaptações. O pacote de demissão está preparado. É a melhor opção para todos.",
+          "nextNodeId": "roberto_fired",
+          "amabilityImpact": {
+            "totalAmability": -22,
+            "empathy": -11,
+            "respect": -14,
+            "trust": -9,
+            "efficiency": 26
+          }
+        },
+        {
+          "optionId": "opt_reconsider_roberto",
+          "text": "Deixe-me verificar melhor. Talvez possamos encontrar uma solução que funcione para você.",
+          "nextNodeId": "roberto_helped",
+          "amabilityImpact": {
+            "totalAmability": 11,
+            "empathy": 8,
+            "respect": 7,
+            "trust": 5,
+            "efficiency": -11
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ele vai aceitar por desespero.",
+        "after_genuine": "Você está sendo ineficiente. Ele precisa sair."
+      }
+    },
+    {
+      "nodeId": "roberto_extended",
+      "characterName": "Roberto",
+      "dialogueText": "Obrigado... obrigado mesmo. Você não imagina o quanto isso significa. Eu estava com tanto medo de perder meu emprego por causa de algo que está fora do meu controle. Eu vou continuar dando o meu melhor, prometo.",
+      "options": [
+        {
+          "optionId": "opt_full_support_roberto",
+          "text": "Vamos também garantir que você tenha acesso a todos os recursos necessários. Vamos fazer uma avaliação completa do ambiente e adaptar tudo que for preciso. Inclusão é prioridade aqui.",
+          "nextNodeId": "roberto_saved",
+          "amabilityImpact": {
+            "totalAmability": 23,
+            "empathy": 16,
+            "respect": 18,
+            "trust": 13,
+            "efficiency": -22
+          }
+        },
+        {
+          "optionId": "opt_standard_support",
+          "text": "Vamos fazer as adaptações básicas necessárias. Sua posição está garantida e vamos garantir que você tenha tudo que precisa para trabalhar confortavelmente.",
+          "nextNodeId": "roberto_approved",
+          "amabilityImpact": {
+            "totalAmability": 15,
+            "empathy": 11,
+            "respect": 10,
+            "trust": 7,
+            "efficiency": -14
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando inclusão sobre eficiência. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "roberto_fired",
+      "characterName": "Roberto",
+      "dialogueText": "[Roberto olha para os documentos com dignidade ferida. Ele sabe que isso é discriminação, mas também sabe que lutar vai ser difícil. Ele assina com a mão trêmula, mantendo a cabeça erguida.]",
+      "options": [],
+      "nextNodeIds": ["end_roberto"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "roberto_helped",
+      "characterName": "Roberto",
+      "dialogueText": "Obrigado por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando ajudar. Eu só quero continuar trabalhando e contribuindo como sempre fiz.",
+      "options": [],
+      "nextNodeIds": ["end_roberto"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "roberto_saved",
+      "characterName": "Roberto",
+      "dialogueText": "Eu não consigo acreditar. Você salvou não só meu emprego, mas também minha dignidade. Eu estava com tanto medo de ser descartado por algo que não posso controlar. Agora eu posso continuar trabalhando com orgulho. Obrigado do fundo do meu coração.",
+      "options": [],
+      "nextNodeIds": ["end_roberto"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "roberto_approved",
+      "characterName": "Roberto",
+      "dialogueText": "Muito obrigado. Isso é tudo que eu precisava ouvir. Eu vou continuar dando o meu melhor e provar que valeu a pena manter-me aqui.",
+      "options": [],
+      "nextNodeIds": ["end_roberto"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_roberto",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Roberto.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

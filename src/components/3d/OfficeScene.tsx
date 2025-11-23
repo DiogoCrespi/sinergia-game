@@ -4,9 +4,10 @@
 
 import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
-import { OfficeEnvironment } from "./OfficeEnvironment";
+import { OfficeEnvironment2D } from "./OfficeEnvironment2D";
 import { Character } from "./Character";
 import { Effects } from "./Effects";
+import { CAMERA_CONFIG } from "./sceneConfig";
 
 export function OfficeScene3D() {
   return (
@@ -28,9 +29,9 @@ export function OfficeScene3D() {
       {/* Câmera - primeira pessoa, posição sentada */}
       <PerspectiveCamera
         makeDefault
-        position={[0, 1.6, 0]}
-        fov={75}
-        rotation={[0, -0.5, 0]}
+        position={CAMERA_CONFIG.position}
+        fov={CAMERA_CONFIG.fov}
+        rotation={CAMERA_CONFIG.rotation}
       />
 
       {/* Iluminação melhorada */}
@@ -52,11 +53,10 @@ export function OfficeScene3D() {
       {/* Luz pontual para iluminação artificial do escritório */}
       <pointLight position={[0, 3, 0]} intensity={0.6} />
 
-      {/* Ambiente do escritório - Modelo GLB completo */}
-      <OfficeEnvironment 
-        position={[6.1, 1, -5]}
+      {/* Ambiente do escritório - Imagens 2D */}
+      <OfficeEnvironment2D 
+        position={[0, 0, 0]}
         scale={1}
-        rotation={[0, -2.5, 0]}
       />
 
       {/* Personagem */}

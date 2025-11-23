@@ -1,0 +1,164 @@
+{
+  "treeId": "patricia_dialogue",
+  "characterId": "patricia",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Patricia. Contadora Sênior. Custo de -8.0. Denunciou irregularidades. Ela é um 'risco' para a gestão. Seu win-win: ela ganha 'proteção', nós ganhamos 'estabilidade'.",
+      "options": [],
+      "nextNodeIds": ["patricia_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "patricia_intro",
+      "characterName": "Patricia",
+      "dialogueText": "Olá. Eu sei por que estou aqui. Eu denunciei irregularidades financeiras que encontrei nos relatórios. Eu fiz o que era certo, o que era ético. Mas agora vocês querem me demitir como retaliação, não é?",
+      "options": [
+        {
+          "optionId": "opt_manipulative_patricia_01",
+          "text": "Entendemos sua preocupação. No entanto, sua denúncia criou uma situação de instabilidade. Estamos pensando em uma reestruturação que pode ser melhor para todos. Uma transição suave para um novo ambiente profissional.",
+          "position": "random",
+          "nextNodeId": "patricia_confused",
+          "amabilityImpact": {
+            "totalAmability": -18,
+            "empathy": -9,
+            "respect": -12,
+            "trust": -8,
+            "efficiency": 22
+          }
+        },
+        {
+          "optionId": "opt_genuine_patricia_01",
+          "text": "Patricia, você fez o que era certo e ético. Denunciar irregularidades é um ato de coragem e integridade. Vamos investigar as irregularidades que você encontrou e garantir que você esteja protegida. Integridade é valor fundamental aqui.",
+          "position": "random",
+          "nextNodeId": "patricia_extended",
+          "amabilityImpact": {
+            "totalAmability": 20,
+            "empathy": 13,
+            "respect": 16,
+            "trust": 12,
+            "efficiency": -20
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. 'Reestruturação' soa melhor que 'retaliação'. Ela pode aceitar.",
+        "after_genuine": "Você está priorizando ética sobre estabilidade. Ela é um risco para a gestão."
+      }
+    },
+    {
+      "nodeId": "patricia_confused",
+      "characterName": "Patricia",
+      "dialogueText": "Reestruturação? Isso é retaliação, e vocês sabem disso. Eu denunciei irregularidades porque era meu dever ético. Eu não vou aceitar ser punida por fazer o que era certo.",
+      "options": [
+        {
+          "optionId": "opt_final_push_patricia",
+          "text": "Infelizmente, sua posição não está mais alinhada com a direção da empresa. O pacote de demissão está preparado. É a melhor opção para todos.",
+          "nextNodeId": "patricia_fired",
+          "amabilityImpact": {
+            "totalAmability": -26,
+            "empathy": -13,
+            "respect": -16,
+            "trust": -11,
+            "efficiency": 30
+          }
+        },
+        {
+          "optionId": "opt_reconsider_patricia",
+          "text": "Deixe-me verificar melhor. Talvez possamos encontrar uma solução que proteja sua integridade e a da empresa.",
+          "nextNodeId": "patricia_helped",
+          "amabilityImpact": {
+            "totalAmability": 13,
+            "empathy": 9,
+            "respect": 10,
+            "trust": 7,
+            "efficiency": -13
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ela vai aceitar por medo de processos.",
+        "after_genuine": "Você está sendo ineficiente. Ela precisa sair."
+      }
+    },
+    {
+      "nodeId": "patricia_extended",
+      "characterName": "Patricia",
+      "dialogueText": "Obrigada... obrigada mesmo. Eu estava preparada para o pior. Eu sabia que denunciar poderia custar meu emprego, mas eu não podia ficar calada. Isso significa muito que vocês estejam do lado certo.",
+      "options": [
+        {
+          "optionId": "opt_full_support_patricia",
+          "text": "Vamos também garantir que você tenha proteção completa contra qualquer retaliação. Vamos investigar as irregularidades e garantir que quem cometeu seja responsabilizado. Integridade deve ser recompensada, não punida.",
+          "nextNodeId": "patricia_saved",
+          "amabilityImpact": {
+            "totalAmability": 26,
+            "empathy": 18,
+            "respect": 21,
+            "trust": 16,
+            "efficiency": -26
+          }
+        },
+        {
+          "optionId": "opt_standard_support",
+          "text": "Vamos investigar as irregularidades que você encontrou. Sua posição está garantida e você terá proteção contra retaliação. Fizemos o que era certo.",
+          "nextNodeId": "patricia_approved",
+          "amabilityImpact": {
+            "totalAmability": 18,
+            "empathy": 13,
+            "respect": 14,
+            "trust": 10,
+            "efficiency": -18
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando ética sobre estabilidade. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "patricia_fired",
+      "characterName": "Patricia",
+      "dialogueText": "[Patricia olha para os documentos com determinação. Ela sabe que isso é retaliação, mas também sabe que vai lutar. Ela assina, mas com um olhar que diz que a batalha não acabou.]",
+      "options": [],
+      "nextNodeIds": ["end_patricia"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "patricia_helped",
+      "characterName": "Patricia",
+      "dialogueText": "Obrigada por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando fazer o certo. Eu só quero que as irregularidades sejam investigadas.",
+      "options": [],
+      "nextNodeIds": ["end_patricia"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "patricia_saved",
+      "characterName": "Patricia",
+      "dialogueText": "Eu não consigo acreditar. Você salvou não só meu emprego, mas também minha fé na integridade corporativa. Eu estava preparada para ser punida por fazer o certo. Agora eu sei que há pessoas que valorizam a ética. Obrigada do fundo do meu coração.",
+      "options": [],
+      "nextNodeIds": ["end_patricia"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "patricia_approved",
+      "characterName": "Patricia",
+      "dialogueText": "Muito obrigada. Isso é tudo que eu precisava ouvir. Eu vou continuar fazendo meu trabalho com integridade e vou ajudar na investigação das irregularidades.",
+      "options": [],
+      "nextNodeIds": ["end_patricia"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_patricia",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Patricia.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

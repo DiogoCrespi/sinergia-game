@@ -14,28 +14,35 @@ export function applyImpact(
   const clamp = (value: number, min: number, max: number) =>
     Math.max(min, Math.min(max, value));
 
+  // Aplicar apenas os valores individuais (empathy, respect, trust)
+  // O totalAmability será calculado como média ponderada depois
+  
+  // Determinar se é escolha genuína ou manipuladora baseado no impacto líquido
+  // Calcula o impacto líquido de amabilidade (soma dos impactos positivos menos negativos)
+  const netAmabilityImpact = 
+    (impact.empathy || 0) + 
+    (impact.respect || 0) + 
+    (impact.trust || 0);
+  
   const newScore: AmabilityScore = {
     ...score,
-    totalAmability: clamp(
-      score.totalAmability + (impact.totalAmability || 0),
-      0,
-      100
-    ),
     empathy: clamp(score.empathy + (impact.empathy || 0), 0, 100),
     respect: clamp(score.respect + (impact.respect || 0), 0, 100),
     trust: clamp(score.trust + (impact.trust || 0), 0, 100),
     efficiency: clamp(score.efficiency + (impact.efficiency || 0), 0, 100),
+    // Escolha genuína: impacto líquido positivo (aumenta amabilidade)
+    // Escolha manipuladora: impacto líquido negativo (diminui amabilidade)
     genuineChoices:
-      impact.totalAmability && impact.totalAmability > 0
+      netAmabilityImpact > 0
         ? score.genuineChoices + 1
         : score.genuineChoices,
     manipulativeChoices:
-      impact.totalAmability && impact.totalAmability < 0
+      netAmabilityImpact < 0
         ? score.manipulativeChoices + 1
         : score.manipulativeChoices,
   };
 
-  // Recalcular totalAmability como média ponderada
+  // Calcular totalAmability como média ponderada de empathy, respect e trust
   newScore.totalAmability = calculateTotal(newScore);
 
   return newScore;
@@ -88,5 +95,8 @@ export const initialScore: AmabilityScore = {
   manipulativeChoices: 0,
   charactersHelped: 0,
 };
+
+
+
 
 

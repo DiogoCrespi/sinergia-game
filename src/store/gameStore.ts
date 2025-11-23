@@ -23,6 +23,10 @@ import { saveGame as saveGameUtil, loadGame as loadGameUtil, type SaveData } fro
 const narrativeManager = new NarrativeManager();
 
 interface GameStore extends GameState {
+  // Loading state
+  isLoading: boolean;
+  loadingProgress: number;
+  
   // Actions
   onChoiceMade: (choiceId: string, impact: AmabilityImpact) => void;
   loadNarrativeTree: (treeId: string) => Promise<void>;
@@ -35,6 +39,7 @@ interface GameStore extends GameState {
   completeCurrentCharacter: () => Promise<void>;
   saveGame: (slot: number) => boolean;
   loadGame: (slot: number) => Promise<boolean>;
+  setLoading: (isLoading: boolean, progress?: number) => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -49,6 +54,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   charactersMet: [],
   currentCharacterIndex: -1,
   characterSequence: DEFAULT_CHARACTER_SEQUENCE,
+  isLoading: false,
+  loadingProgress: 0,
 
   // Action: Processa uma escolha do jogador
   onChoiceMade: (choiceId, impact) => {
@@ -160,6 +167,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentState: "playing",
       playthroughCount: get().playthroughCount + 1,
       choicesHistory: [],
+      isLoading: false,
+      loadingProgress: 0,
       amabilityScore: initialScore,
       currentCharacter: null,
       currentNode: null,
@@ -189,13 +198,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentState: "playing",
       currentCharacterIndex: 0,
       characterSequence: DEFAULT_CHARACTER_SEQUENCE,
+      isLoading: true,
+      loadingProgress: 0,
     });
+    
+    // Simular progresso
+    const progressSteps = [20, 40, 60, 80, 100];
+    for (let i = 0; i < progressSteps.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 150));
+      set({ loadingProgress: progressSteps[i] });
+    }
+    
     // Carregar primeiro personagem da sequência
     const firstCharacter = DEFAULT_CHARACTER_SEQUENCE[0];
     if (firstCharacter) {
       await get().loadNarrativeTree(getTreeId(firstCharacter));
       set({ currentCharacterIndex: 0 });
     }
+    
+    // Aguardar um pouco antes de esconder loading (manter visível por mais tempo)
+    await new Promise(resolve => setTimeout(resolve, 800));
+    set({ isLoading: false, loadingProgress: 0 });
+  },
+
+  // Action: Define estado de loading
+  setLoading: (isLoading, progress = 0) => {
+    set({ isLoading, loadingProgress: progress });
   },
 
   // Action: Carrega o próximo personagem na sequência
@@ -207,12 +235,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
 
     if (nextCharacter) {
+      // Mostrar tela de loading
+      set({ isLoading: true, loadingProgress: 0 });
+      
+      // Simular progresso
+      const progressSteps = [20, 40, 60, 80, 100];
+      for (let i = 0; i < progressSteps.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        set({ loadingProgress: progressSteps[i] });
+      }
+      
       const nextIndex = state.currentCharacterIndex + 1;
       set({ currentCharacterIndex: nextIndex });
+      
+      // Carregar árvore de narrativa
       await get().loadNarrativeTree(getTreeId(nextCharacter));
+      
+      // Aguardar um pouco antes de esconder loading (manter visível por mais tempo)
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Esconder tela de loading
+      set({ isLoading: false, loadingProgress: 0 });
     } else {
       // Todos os personagens foram vistos, ir para final
-      set({ currentState: "ending" });
+      set({ isLoading: false, loadingProgress: 0, currentState: "ending" });
     }
   },
 
@@ -222,10 +268,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     
     // Verificar se chegou ao final do diálogo atual
     if (state.currentNode?.nodeId.includes("end_")) {
-      // Pequeno delay antes de avançar
-      setTimeout(async () => {
-        await get().loadNextCharacter();
-      }, 1000);
+      // Pequeno delay antes de avançar (fade out do diálogo)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await get().loadNextCharacter();
     }
   },
 
