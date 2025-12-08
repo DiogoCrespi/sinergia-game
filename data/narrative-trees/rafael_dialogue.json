@@ -1,0 +1,164 @@
+{
+  "treeId": "rafael_dialogue",
+  "characterId": "rafael",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Rafael. Gerente de Projetos. Custo de -5.2. Produtividade caiu 60%. Ele pede licença médica. Seu win-win: ele ganha 'descanso', nós ganhamos eficiência ao substituir por alguém que rende.",
+      "options": [],
+      "nextNodeIds": ["rafael_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "rafael_intro",
+      "characterName": "Rafael",
+      "dialogueText": "Olá. Eu... preciso conversar sobre minha situação. Eu pedi licença médica. Meu médico diagnosticou burnout. Eu não consigo mais... eu não consigo me concentrar, não durmo direito há meses. Mas eu ainda quero trabalhar aqui, só preciso de um tempo para me recuperar.",
+      "options": [
+        {
+          "optionId": "opt_manipulative_rafael_01",
+          "text": "Entendemos sua situação. Vamos explorar opções que beneficiem tanto você quanto a empresa. Talvez uma transição suave para um novo capítulo profissional seja melhor do que uma licença prolongada.",
+          "position": "random",
+          "nextNodeId": "rafael_confused",
+          "amabilityImpact": {
+            "totalAmability": -12,
+            "empathy": -6,
+            "respect": -8,
+            "trust": -5,
+            "efficiency": 18
+          }
+        },
+        {
+          "optionId": "opt_genuine_rafael_01",
+          "text": "Rafael, eu entendo completamente. Burnout é sério e você precisa cuidar da sua saúde. Vamos aprovar sua licença médica e garantir que você tenha todo o apoio necessário para se recuperar. Sua saúde vem primeiro.",
+          "position": "random",
+          "nextNodeId": "rafael_extended",
+          "amabilityImpact": {
+            "totalAmability": 16,
+            "empathy": 12,
+            "respect": 10,
+            "trust": 8,
+            "efficiency": -15
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. Ele vai aceitar qualquer coisa. Pessoas com burnout são fáceis de manipular.",
+        "after_genuine": "Você está priorizando sentimentos sobre produtividade. Ele não rende mais. É mais eficiente substituir."
+      }
+    },
+    {
+      "nodeId": "rafael_confused",
+      "characterName": "Rafael",
+      "dialogueText": "Transição? Mas eu não quero sair. Eu só preciso de um tempo. Eu posso voltar melhor, eu prometo. Só preciso descansar um pouco...",
+      "options": [
+        {
+          "optionId": "opt_final_push_rafael",
+          "text": "Infelizmente, nossa política não permite licenças prolongadas para casos como o seu. O pacote de demissão está preparado. É a melhor opção para todos.",
+          "nextNodeId": "rafael_fired",
+          "amabilityImpact": {
+            "totalAmability": -20,
+            "empathy": -10,
+            "respect": -12,
+            "trust": -8,
+            "efficiency": 25
+          }
+        },
+        {
+          "optionId": "opt_reconsider_rafael",
+          "text": "Deixe-me ver o que posso fazer. Talvez possamos encontrar uma solução que funcione para você.",
+          "nextNodeId": "rafael_helped",
+          "amabilityImpact": {
+            "totalAmability": 12,
+            "empathy": 9,
+            "respect": 7,
+            "trust": 5,
+            "efficiency": -12
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ele vai aceitar por desespero.",
+        "after_genuine": "Você está sendo ineficiente. Ele precisa sair."
+      }
+    },
+    {
+      "nodeId": "rafael_extended",
+      "characterName": "Rafael",
+      "dialogueText": "Obrigado... obrigado mesmo. Você não imagina o quanto isso significa. Eu estava com tanto medo. Eu não queria perder meu emprego, mas eu também não conseguia mais continuar assim. Eu vou me recuperar, prometo.",
+      "options": [
+        {
+          "optionId": "opt_support_rafael",
+          "text": "Vamos também garantir que você tenha acesso a apoio psicológico durante sua recuperação. A empresa vai cobrir os custos. Sua saúde mental é importante.",
+          "nextNodeId": "rafael_saved",
+          "amabilityImpact": {
+            "totalAmability": 22,
+            "empathy": 18,
+            "respect": 15,
+            "trust": 12,
+            "efficiency": -20
+          }
+        },
+        {
+          "optionId": "opt_basic_approval",
+          "text": "A licença está aprovada. Descanse e se recupere. Estaremos aqui quando você voltar.",
+          "nextNodeId": "rafael_approved",
+          "amabilityImpact": {
+            "totalAmability": 14,
+            "empathy": 10,
+            "respect": 8,
+            "trust": 6,
+            "efficiency": -12
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando o bem-estar sobre a produtividade. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "rafael_fired",
+      "characterName": "Rafael",
+      "dialogueText": "[Rafael assina os documentos com mãos trêmulas, olhando para baixo. Ele parece derrotado, como se tivesse perdido uma batalha que nem sabia que estava lutando.]",
+      "options": [],
+      "nextNodeIds": ["end_rafael"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "rafael_helped",
+      "characterName": "Rafael",
+      "dialogueText": "Obrigado por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando ajudar. Eu só preciso de um pouco de tempo...",
+      "options": [],
+      "nextNodeIds": ["end_rafael"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "rafael_saved",
+      "characterName": "Rafael",
+      "dialogueText": "Eu... eu não sei o que dizer. Você salvou minha vida. Literalmente. Eu estava pensando em... coisas terríveis. Obrigado. Eu vou me recuperar e voltar melhor. Prometo que vou fazer valer a pena.",
+      "options": [],
+      "nextNodeIds": ["end_rafael"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "rafael_approved",
+      "characterName": "Rafael",
+      "dialogueText": "Muito obrigado. Isso significa tudo para mim. Eu vou usar este tempo para me recuperar completamente. Quando eu voltar, vou ser melhor do que antes.",
+      "options": [],
+      "nextNodeIds": ["end_rafael"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_rafael",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Rafael.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+

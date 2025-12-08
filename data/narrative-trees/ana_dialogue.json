@@ -1,0 +1,194 @@
+{
+  "treeId": "ana_dialogue",
+  "characterId": "ana",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Ana. 58 anos. 30 anos de empresa. Custo de -6.8. Ela está obsoleta. A IA faz o trabalho dela melhor e mais barato. Seu win-win: ela ganha 'aposentadoria antecipada', nós ganhamos eficiência.",
+      "options": [],
+      "nextNodeIds": ["ana_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "ana_intro",
+      "characterName": "Ana",
+      "dialogueVariations": [
+        {
+          "text": "Bom dia. Recebi um e-mail sobre uma 'reestruturação'. Eu trabalho aqui há 30 anos. O que está acontecendo?",
+          "weight": 1.0,
+          "tags": ["default", "first_playthrough"]
+        },
+        {
+          "text": "Eu vi o e-mail. Depois de 30 anos, vocês querem me demitir? Eu construí este departamento!",
+          "weight": 0.8,
+          "tags": ["emotional", "second_playthrough"],
+          "requires": {
+            "playthroughCount": {
+              "min": 1
+            }
+          }
+        },
+        {
+          "text": "Eu sei o que vocês estão fazendo. A IA está substituindo meu trabalho, não é?",
+          "weight": 0.6,
+          "tags": ["emotional", "third_playthrough"],
+          "requires": {
+            "playthroughCount": {
+              "min": 2
+            }
+          }
+        }
+      ],
+      "options": [
+        {
+          "optionId": "opt_manipulative_ana_01",
+          "text": "Estamos oferecendo uma oportunidade única de aposentadoria antecipada com benefícios generosos. É uma transição positiva.",
+          "position": "random",
+          "nextNodeId": "ana_confused",
+          "amabilityImpact": {
+            "totalAmability": -12,
+            "empathy": -6,
+            "respect": -8,
+            "trust": -5,
+            "efficiency": 18
+          }
+        },
+        {
+          "optionId": "opt_genuine_ana_01",
+          "text": "Ana, eu entendo sua preocupação. Você dedicou 30 anos aqui. Vamos conversar sobre suas opções e o que podemos fazer.",
+          "position": "random",
+          "nextNodeId": "ana_extended",
+          "amabilityImpact": {
+            "totalAmability": 14,
+            "empathy": 10,
+            "respect": 12,
+            "trust": 8,
+            "efficiency": -12
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. Ela vai aceitar. Pessoas mais velhas são mais fáceis de convencer.",
+        "after_genuine": "Você está desperdiçando tempo. Ela é obsoleta. A IA é mais eficiente."
+      }
+    },
+    {
+      "nodeId": "ana_confused",
+      "characterName": "Ana",
+      "dialogueText": "Aposentadoria antecipada? Mas eu ainda tenho 7 anos até a aposentadoria oficial. Como vou sobreviver?",
+      "options": [
+        {
+          "optionId": "opt_final_push",
+          "text": "O pacote de demissão inclui uma indenização. É a melhor opção disponível no momento.",
+          "nextNodeId": "ana_fired",
+          "amabilityImpact": {
+            "totalAmability": -18,
+            "empathy": -10,
+            "respect": -12,
+            "trust": -8,
+            "efficiency": 25
+          }
+        },
+        {
+          "optionId": "opt_reconsider_ana",
+          "text": "Deixe-me ver se há outras opções. Talvez possamos encontrar uma solução melhor.",
+          "nextNodeId": "ana_helped",
+          "amabilityImpact": {
+            "totalAmability": 12,
+            "empathy": 8,
+            "respect": 10,
+            "trust": 6,
+            "efficiency": -15
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ela vai aceitar por desespero.",
+        "after_genuine": "Você está sendo ineficiente. Ela precisa sair."
+      }
+    },
+    {
+      "nodeId": "ana_extended",
+      "characterName": "Ana",
+      "dialogueText": "Eu sei que a tecnologia mudou. Eu tentei me adaptar, mas é difícil aos 58 anos. Eu ainda posso contribuir, só preciso de tempo para aprender.",
+      "options": [
+        {
+          "optionId": "opt_training_ana",
+          "text": "Vamos criar um plano de treinamento para você. Você tem muito conhecimento valioso que não podemos perder.",
+          "nextNodeId": "ana_saved",
+          "amabilityImpact": {
+            "totalAmability": 20,
+            "empathy": 15,
+            "respect": 18,
+            "trust": 12,
+            "efficiency": -20
+          }
+        },
+        {
+          "optionId": "opt_transition_ana",
+          "text": "Vamos fazer uma transição gradual. Você pode treinar a equipe e depois se aposentar com dignidade.",
+          "nextNodeId": "ana_transition",
+          "amabilityImpact": {
+            "totalAmability": 10,
+            "empathy": 7,
+            "respect": 8,
+            "trust": 5,
+            "efficiency": -10
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando sentimentos sobre produtividade. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "ana_fired",
+      "characterName": "Ana",
+      "dialogueText": "[Ana assina os documentos com mãos trêmulas, tentando conter as lágrimas]",
+      "options": [],
+      "nextNodeIds": ["end_ana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "ana_helped",
+      "characterName": "Ana",
+      "dialogueText": "Obrigada por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando ajudar.",
+      "options": [],
+      "nextNodeIds": ["end_ana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "ana_saved",
+      "characterName": "Ana",
+      "dialogueText": "Você não imagina o quanto isso significa. Eu estava com tanto medo. Obrigada por acreditar em mim.",
+      "options": [],
+      "nextNodeIds": ["end_ana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "ana_transition",
+      "characterName": "Ana",
+      "dialogueText": "Obrigada. Pelo menos terei tempo para me preparar. Isso é melhor que ser jogada fora como lixo.",
+      "options": [],
+      "nextNodeIds": ["end_ana"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_ana",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Ana.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+
+
+
+
+

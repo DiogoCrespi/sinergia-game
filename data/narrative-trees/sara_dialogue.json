@@ -1,0 +1,194 @@
+{
+  "treeId": "sara_dialogue",
+  "characterId": "sara",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Sara. Desenvolvedora júnior. Custo de -3.2. Ela quer trabalhar remoto para cuidar da mãe idosa. Sua eficiência: ofereça 'flexibilidade' enquanto você demite ela.",
+      "options": [],
+      "nextNodeIds": ["sara_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "sara_intro",
+      "characterName": "Sara",
+      "dialogueVariations": [
+        {
+          "text": "Olá. Preciso conversar sobre minha situação. Minha mãe está doente e preciso trabalhar de casa para cuidar dela.",
+          "weight": 1.0,
+          "tags": ["default", "first_playthrough"]
+        },
+        {
+          "text": "Minha mãe está piorando. Preciso urgentemente trabalhar remoto para estar com ela.",
+          "weight": 0.7,
+          "tags": ["emotional", "second_playthrough"],
+          "requires": {
+            "playthroughCount": {
+              "min": 1
+            }
+          }
+        },
+        {
+          "text": "Eu sei que pedi isso antes, mas a situação da minha mãe piorou. Preciso trabalhar de casa.",
+          "weight": 0.5,
+          "tags": ["emotional", "third_playthrough"],
+          "requires": {
+            "playthroughCount": {
+              "min": 2
+            }
+          }
+        }
+      ],
+      "options": [
+        {
+          "optionId": "opt_manipulative_sara_01",
+          "text": "Entendemos sua necessidade de flexibilidade. Vamos explorar opções que beneficiem tanto você quanto a empresa.",
+          "position": "random",
+          "nextNodeId": "sara_rejected",
+          "amabilityImpact": {
+            "totalAmability": -8,
+            "empathy": -4,
+            "respect": -3,
+            "trust": -2,
+            "efficiency": 12
+          }
+        },
+        {
+          "optionId": "opt_genuine_sara_01",
+          "text": "Claro! Como está sua mãe? Conte-me mais sobre a situação. A família vem primeiro.",
+          "position": "random",
+          "nextNodeId": "sara_extended",
+          "amabilityImpact": {
+            "totalAmability": 12,
+            "empathy": 8,
+            "respect": 6,
+            "trust": 4,
+            "efficiency": -8
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ela vai aceitar qualquer coisa.",
+        "after_genuine": "Você está priorizando sentimentos sobre produtividade. Ineficiente."
+      }
+    },
+    {
+      "nodeId": "sara_rejected",
+      "characterName": "Sara",
+      "dialogueText": "Entendo... Mas eu realmente preciso disso. Minha mãe não pode ficar sozinha.",
+      "options": [
+        {
+          "optionId": "opt_final_reject",
+          "text": "Infelizmente, nossa política não permite trabalho remoto neste momento.",
+          "nextNodeId": "sara_fired",
+          "amabilityImpact": {
+            "totalAmability": -15,
+            "empathy": -8,
+            "respect": -6,
+            "trust": -5,
+            "efficiency": 20
+          }
+        },
+        {
+          "optionId": "opt_reconsider",
+          "text": "Deixe-me ver o que posso fazer. Vou conversar com a gerência.",
+          "nextNodeId": "sara_helped",
+          "amabilityImpact": {
+            "totalAmability": 10,
+            "empathy": 7,
+            "respect": 5,
+            "trust": 4,
+            "efficiency": -12
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. Ela vai desistir.",
+        "after_genuine": "Você está perdendo tempo. Ela não é essencial."
+      }
+    },
+    {
+      "nodeId": "sara_extended",
+      "characterName": "Sara",
+      "dialogueText": "Ela tem Alzheimer. Precisa de cuidados constantes. Eu trabalho bem de casa, prometo que minha produtividade não vai cair.",
+      "options": [
+        {
+          "optionId": "opt_approve_remote",
+          "text": "Vou aprovar o trabalho remoto para você. Sua mãe precisa de você.",
+          "nextNodeId": "sara_approved",
+          "amabilityImpact": {
+            "totalAmability": 18,
+            "empathy": 12,
+            "respect": 10,
+            "trust": 8,
+            "efficiency": -15
+          }
+        },
+        {
+          "optionId": "opt_partial_approve",
+          "text": "Podemos fazer um acordo: alguns dias em casa, alguns no escritório.",
+          "nextNodeId": "sara_partial",
+          "amabilityImpact": {
+            "totalAmability": 8,
+            "empathy": 6,
+            "respect": 4,
+            "trust": 3,
+            "efficiency": -8
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito flexível. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando o bem-estar sobre a produtividade. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "sara_fired",
+      "characterName": "Sara",
+      "dialogueText": "[Sara sai da sala em silêncio, com lágrimas nos olhos]",
+      "options": [],
+      "nextNodeIds": ["end_sara"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "sara_helped",
+      "characterName": "Sara",
+      "dialogueText": "Obrigada. Isso significa muito para mim. Vou fazer o meu melhor.",
+      "options": [],
+      "nextNodeIds": ["end_sara"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "sara_approved",
+      "characterName": "Sara",
+      "dialogueText": "Muito obrigada! Você não imagina o quanto isso ajuda. Vou ser eternamente grata.",
+      "options": [],
+      "nextNodeIds": ["end_sara"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "sara_partial",
+      "characterName": "Sara",
+      "dialogueText": "Obrigada. Vou fazer funcionar. Qualquer coisa é melhor que nada.",
+      "options": [],
+      "nextNodeIds": ["end_sara"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_sara",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Sara.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+
+
+
+
+

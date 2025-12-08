@@ -1,0 +1,164 @@
+{
+  "treeId": "lucas_dialogue",
+  "characterId": "lucas",
+  "nodes": [
+    {
+      "nodeId": "start",
+      "characterName": "Consciência",
+      "dialogueText": "Lucas. Designer Gráfico. Custo de -2.5. Conflitos internos por causa de sua orientação. Ele é um 'problema' para o ambiente. Seu win-win: ele ganha 'liberdade', nós ganhamos 'harmonia'.",
+      "options": [],
+      "nextNodeIds": ["lucas_intro"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "lucas_intro",
+      "characterName": "Lucas",
+      "dialogueText": "Olá. Eu sei por que estou aqui. Eu estou sofrendo discriminação de alguns colegas por causa da minha orientação sexual. Eu tentei ignorar, mas está afetando meu trabalho. A empresa quer me demitir para 'evitar problemas', não é?",
+      "options": [
+        {
+          "optionId": "opt_manipulative_lucas_01",
+          "text": "Entendemos que há conflitos no ambiente. Estamos pensando em uma realocação que pode ser melhor para você. Um ambiente onde você possa se sentir mais confortável e onde não haja conflitos.",
+          "position": "random",
+          "nextNodeId": "lucas_confused",
+          "amabilityImpact": {
+            "totalAmability": -16,
+            "empathy": -8,
+            "respect": -11,
+            "trust": -7,
+            "efficiency": 21
+          }
+        },
+        {
+          "optionId": "opt_genuine_lucas_01",
+          "text": "Lucas, discriminação não será tolerada aqui. Vamos investigar os casos de discriminação e garantir que você tenha um ambiente de trabalho respeitoso. Diversidade é um valor fundamental e vamos proteger isso.",
+          "position": "random",
+          "nextNodeId": "lucas_extended",
+          "amabilityImpact": {
+            "totalAmability": 19,
+            "empathy": 12,
+            "respect": 15,
+            "trust": 11,
+            "efficiency": -19
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Bom. 'Realocação' soa melhor que 'demissão por discriminação'. Ele pode aceitar.",
+        "after_genuine": "Você está priorizando diversidade sobre harmonia. Ele causa conflitos."
+      }
+    },
+    {
+      "nodeId": "lucas_confused",
+      "characterName": "Lucas",
+      "dialogueText": "Realocação? Mas eu não quero sair. Eu só quero trabalhar sem ser discriminado. Por que eu tenho que sair? Por que não vocês lidam com quem está me discriminando?",
+      "options": [
+        {
+          "optionId": "opt_final_push_lucas",
+          "text": "Infelizmente, não podemos controlar como as pessoas se sentem. O pacote de demissão está preparado. É a melhor opção para evitar mais conflitos.",
+          "nextNodeId": "lucas_fired",
+          "amabilityImpact": {
+            "totalAmability": -24,
+            "empathy": -12,
+            "respect": -15,
+            "trust": -10,
+            "efficiency": 28
+          }
+        },
+        {
+          "optionId": "opt_reconsider_lucas",
+          "text": "Deixe-me verificar melhor. Talvez possamos encontrar uma solução que proteja você e resolva os conflitos.",
+          "nextNodeId": "lucas_helped",
+          "amabilityImpact": {
+            "totalAmability": 12,
+            "empathy": 8,
+            "respect": 9,
+            "trust": 6,
+            "efficiency": -12
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Eficiente. Ele vai aceitar por desespero.",
+        "after_genuine": "Você está sendo ineficiente. Ele precisa sair."
+      }
+    },
+    {
+      "nodeId": "lucas_extended",
+      "characterName": "Lucas",
+      "dialogueText": "Obrigado... obrigado mesmo. Eu estava com tanto medo. Eu sabia que poderia ser demitido por ser quem eu sou. Isso significa muito que vocês estejam do lado certo. Eu só quero trabalhar em paz.",
+      "options": [
+        {
+          "optionId": "opt_full_support_lucas",
+          "text": "Vamos também garantir que você tenha proteção completa. Vamos fazer treinamento de diversidade para toda a equipe e garantir que quem discriminar seja responsabilizado. Diversidade é força, não fraqueza.",
+          "nextNodeId": "lucas_saved",
+          "amabilityImpact": {
+            "totalAmability": 24,
+            "empathy": 16,
+            "respect": 19,
+            "trust": 14,
+            "efficiency": -24
+          }
+        },
+        {
+          "optionId": "opt_standard_support",
+          "text": "Vamos investigar os casos de discriminação e garantir que você tenha um ambiente respeitoso. Sua posição está garantida e vamos proteger você.",
+          "nextNodeId": "lucas_approved",
+          "amabilityImpact": {
+            "totalAmability": 17,
+            "empathy": 12,
+            "respect": 13,
+            "trust": 9,
+            "efficiency": -17
+          }
+        }
+      ],
+      "conscienceComment": {
+        "before": "",
+        "after_manipulative": "Você está sendo muito generoso. Isso não é eficiente.",
+        "after_genuine": "Você está priorizando diversidade sobre harmonia. Inaceitável."
+      }
+    },
+    {
+      "nodeId": "lucas_fired",
+      "characterName": "Lucas",
+      "dialogueText": "[Lucas olha para os documentos com raiva e tristeza. Ele sabe que isso é discriminação, mas também sabe que lutar vai ser difícil. Ele assina, mas com determinação de não desistir.]",
+      "options": [],
+      "nextNodeIds": ["end_lucas"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "lucas_helped",
+      "characterName": "Lucas",
+      "dialogueText": "Obrigado por tentar. Eu sei que não é fácil, mas significa muito que você esteja tentando fazer o certo. Eu só quero trabalhar sem ser discriminado.",
+      "options": [],
+      "nextNodeIds": ["end_lucas"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "lucas_saved",
+      "characterName": "Lucas",
+      "dialogueText": "Eu não consigo acreditar. Você salvou não só meu emprego, mas também minha dignidade. Eu estava preparado para ser punido por ser quem eu sou. Agora eu sei que há pessoas que valorizam a diversidade. Obrigado do fundo do meu coração.",
+      "options": [],
+      "nextNodeIds": ["end_lucas"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "lucas_approved",
+      "characterName": "Lucas",
+      "dialogueText": "Muito obrigado. Isso é tudo que eu precisava ouvir. Eu vou continuar fazendo meu trabalho com orgulho e vou ajudar a criar um ambiente mais inclusivo.",
+      "options": [],
+      "nextNodeIds": ["end_lucas"],
+      "isAutomatic": true
+    },
+    {
+      "nodeId": "end_lucas",
+      "characterName": "Sistema",
+      "dialogueText": "Fim da conversa com Lucas.",
+      "options": [],
+      "isAutomatic": true
+    }
+  ]
+}
+
